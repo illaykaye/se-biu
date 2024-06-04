@@ -1,16 +1,73 @@
 package phone;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Phonebook {
 	private ArrayList<Contact> contacts;
-	
+
+	Scanner scanner = new Scanner(System.in);
+
 	public Phonebook() {
 		this.contacts = new ArrayList<Contact>();
 	}
 	
 	public void run() {
-		
+		boolean exit = false;
+		System.out.println("Phonebook:");
+		System.out.println("1: Add contact");
+		System.out.println("2: Delete contact");
+		System.out.println("3: Print all contacts");
+		System.out.println("4: Search contact");
+		System.out.println("5: Sort phonebook (lexicographic)");
+		System.out.println("6: Sort phonebook (numeric)");
+		System.out.println("7: Remove duplicates");
+		System.out.println("8: Reverse phonebook");
+		System.out.println("9: Save phonebook");
+		System.out.println("10: Load contacts");
+		System.out.println("11: Exit");
+		while (!exit) {
+			System.out.print("Enter cmd: ");
+			int cmd = scanner.nextInt();
+			switch (cmd) {
+				case 1:
+					this.addContact(null);
+					break;
+				case 2:
+					this.removeContact(null);
+					break;
+				case 3:
+					this.printAllContacts();
+					break;
+				case 4:
+					this.searchContact();
+					break;
+				case 5:
+					this.nameLexicographicSort();
+					break;
+				case 6:
+					this.numberNumericSort();
+					break;
+				case 7:
+					this.removeDuplicateContacts();
+					break;
+				case 8:
+					this.reverseOrder();
+					break;
+				case 9:
+					this.saveToFile();
+					break;
+				case 10:
+					this.loadFromFile();
+					break;
+				case 11:
+					exit = true;
+					break;
+				default:
+					System.out.println("Command not found");
+					break;
+			};
+		}
 	}
 	
 	private void addContact(Contact contact) {
@@ -25,10 +82,10 @@ public class Phonebook {
 			}
 	}
 	
-	private void printAllContacts() {
-		
-	}
+	private void printAllContacts() {}
 	
+	private void searchContact() {}
+
 	private void nameLexicographicSort() {
 		this.contacts.sort((a, b) -> a.getName().compareTo(b.getName()));
 	}

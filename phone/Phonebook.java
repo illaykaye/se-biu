@@ -1,6 +1,7 @@
 package phone;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Scanner;
 
 public class Phonebook {
@@ -31,10 +32,10 @@ public class Phonebook {
 			int cmd = scanner.nextInt();
 			switch (cmd) {
 				case 1:
-					this.addContact(null);
+					this.addContact();
 					break;
 				case 2:
-					this.removeContact(null);
+					this.removeContact();
 					break;
 				case 3:
 					this.printAllContacts();
@@ -70,21 +71,40 @@ public class Phonebook {
 		}
 	}
 	
-	private void addContact(Contact contact) {
+	private void addContact() {
+		System.out.print("Enter contact name: ");
+		String name = scanner.nextLine();
+		System.out.print("Enter phone number: ");
+		String phoneNumber = scanner.nextLine();
+		Contact contact = new Contact(name, phoneNumber);
 		this.contacts.add(contact);
 	}
 	
-	private void removeContact(String name) {
-		for (int i = 0; i < this.contacts.size(); ++i)
+	private void removeContact() {
+		System.out.print("Enter contact name to remove: ");
+		String name = scanner.nextLine();
+		for (int i = 0; i < this.contacts.size(); ++i) {
 			if (this.contacts.get(i).getName().equals(name)) {
 				this.contacts.remove(i);
 				return;
 			}
+		}
 	}
 	
 	private void printAllContacts() {}
 	
-	private void searchContact() {}
+	private void searchContact() {
+		System.out.print("Enter contact name to search: ");
+		String name = scanner.nextLine();
+		int counter = 1;
+		for (int i = 0; i < this.contacts.size(); ++i) {
+			Contact contact = this.contacts.get(i);
+			if (this.contacts.get(i).getName().equals(name)) {
+				System.out.printf("%d. %s - %s", counter, contact.getName(), contact.getPhoneNumber());
+				counter++;
+			}
+		}
+	}
 
 	private void nameLexicographicSort() {
 		this.contacts.sort((a, b) -> a.getName().compareTo(b.getName()));
@@ -95,16 +115,18 @@ public class Phonebook {
 	}
 	
 	private void removeDuplicateContacts() {
-		for (int i = 0; i < this.contacts.size(); ++i)
-			for (Contact contact : this.contacts.subList(0, i))
+		for (int i = 0; i < this.contacts.size(); ++i) {
+			for (Contact contact : this.contacts.subList(0, i)) {
 				if (this.contacts.get(i).equals(contact)) {
 					this.contacts.remove(i);
 					break;
 				}
+			}
+		}
 	}
 	
 	private void reverseOrder() {
-		
+		Collections.reverse(this.contacts);
 	}
 	
 	// NOTE: This should be combined with "printAllContacts"

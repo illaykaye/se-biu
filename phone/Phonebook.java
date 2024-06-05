@@ -115,14 +115,12 @@ public class Phonebook {
 	}
 	
 	private void removeDuplicateContacts() {
-		for (int i = 0; i < this.contacts.size(); ++i) {
-			for (Contact contact : this.contacts.subList(0, i)) {
-				if (this.contacts.get(i).equals(contact)) {
+		for (int i = this.contacts.size(); 0 <= i; --i)
+			for (Contact contact : this.contacts.subList(0, i))
+				if (this.contacts.get(i).equals(contact) {
 					this.contacts.remove(i);
 					break;
 				}
-			}
-		}
 	}
 	
 	private void reverseOrder() {

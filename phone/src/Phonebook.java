@@ -1,138 +1,176 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
 
 public class Phonebook {
-	private ArrayList<Contact> contacts;
+    private final Scanner scanner = new Scanner(System.in);
+    private final ArrayList<Contact> contacts;
 
-	Scanner scanner = new Scanner(System.in);
+    public Phonebook() {
+        this.contacts = new ArrayList<Contact>();
+    }
 
-	public Phonebook() {
-		this.contacts = new ArrayList<Contact>();
-	}
-	
-	public void run() {
-		boolean exit = false;
-		System.out.println("Phonebook:");
-		System.out.println("1: Add contact");
-		System.out.println("2: Delete contact");
-		System.out.println("3: Print all contacts");
-		System.out.println("4: Search contact");
-		System.out.println("5: Sort phonebook (lexicographic)");
-		System.out.println("6: Sort phonebook (numeric)");
-		System.out.println("7: Remove duplicates");
-		System.out.println("8: Reverse phonebook");
-		System.out.println("9: Save phonebook");
-		System.out.println("10: Load contacts");
-		System.out.println("11: Exit");
-		while (!exit) {
-			System.out.print("Enter cmd: ");
-			int cmd = scanner.nextInt();
-			switch (cmd) {
-				case 1:
-					this.addContact();
-					break;
-				case 2:
-					this.removeContact();
-					break;
-				case 3:
-					this.printAllContacts();
-					break;
-				case 4:
-					this.searchContact();
-					break;
-				case 5:
-					this.nameLexicographicSort();
-					break;
-				case 6:
-					this.numberNumericSort();
-					break;
-				case 7:
-					this.removeDuplicateContacts();
-					break;
-				case 8:
-					this.reverseOrder();
-					break;
-				case 9:
-					this.saveToFile();
-					break;
-				case 10:
-					this.loadFromFile();
-					break;
-				case 11:
-					exit = true;
-					break;
-				default:
-					System.out.println("Command not found");
-					break;
-			};
-		}
-	}
-	
-	private void addContact() {
-		System.out.print("Enter contact name: ");
-		String name = scanner.nextLine();
-		System.out.print("Enter phone number: ");
-		String phoneNumber = scanner.nextLine();
-		Contact contact = new Contact(name, phoneNumber);
-		this.contacts.add(contact);
-	}
-	
-	private void removeContact() {
-		System.out.print("Enter contact name to remove: ");
-		String name = scanner.nextLine();
-		for (int i = 0; i < this.contacts.size(); ++i) {
-			if (this.contacts.get(i).getName().equals(name)) {
-				this.contacts.remove(i);
-				return;
-			}
-		}
-	}
-	
-	private void printAllContacts() {}
-	
-	private void searchContact() {
-		System.out.print("Enter contact name to search: ");
-		String name = scanner.nextLine();
-		int counter = 1;
-		for (int i = 0; i < this.contacts.size(); ++i) {
-			Contact contact = this.contacts.get(i);
-			if (this.contacts.get(i).getName().equals(name)) {
-				System.out.printf("%d. %s - %s", counter, contact.getName(), contact.getPhoneNumber());
-				counter++;
-			}
-		}
-	}
+    private void printOptions() {
+        System.out.println("Phonebook:");
+        System.out.println("1: Add contact");
+        System.out.println("2: Delete contact");
+        System.out.println("3: Print all contacts");
+        System.out.println("4: Search contact");
+        System.out.println("5: Sort phonebook (lexicographic)");
+        System.out.println("6: Sort phonebook (numeric)");
+        System.out.println("7: Remove duplicates");
+        System.out.println("8: Reverse phonebook");
+        System.out.println("9: Save phonebook");
+        System.out.println("10: Load contacts");
+        System.out.println("11: Exit");
+    }
 
-	private void nameLexicographicSort() {
-		this.contacts.sort((a, b) -> a.getName().compareTo(b.getName()));
-	}
-	
-	private void numberNumericSort() {
-		this.contacts.sort((a, b) -> b.getPhoneNumber().compareTo(a.getPhoneNumber()));
-	}
-	
-	private void removeDuplicateContacts() {
-		for (int i = this.contacts.size() - 1; 0 <= i; --i) {
-			for (Contact contact : this.contacts.subList(0, i)) {
-				if (this.contacts.get(i).equals(contact)) {
-					this.contacts.remove(i);
-					break;
-				}
-			}
-		}
-	}
-	
-	private void reverseOrder() {
-		Collections.reverse(this.contacts);
-	}
-	
-	// NOTE: This should be combined with "printAllContacts"
-	private void saveToFile() {
-		
-	}
-	
-	private void loadFromFile() {
-		
-	}
+    private boolean decodeUserInput(int input) throws Exception {
+        switch (input) {
+            case 1:
+                this.addContact();
+                break;
+            case 2:
+                this.removeContact();
+                break;
+            case 3:
+                this.printAllContacts();
+                break;
+            case 4:
+                this.searchContact();
+                break;
+            case 5:
+                this.nameLexicographicSort();
+                break;
+            case 6:
+                this.numberNumericSort();
+                break;
+            case 7:
+                this.removeDuplicateContacts();
+                break;
+            case 8:
+                this.reverseOrder();
+                break;
+            case 9:
+                this.saveToFile();
+                break;
+            case 10:
+                this.loadFromFile();
+                break;
+            case 11:
+                return true;
+            default:
+                throw new Exception("Invalid Option");
+        }
+        return false;
+    }
+
+    public void runApp() {
+        boolean exit = false;
+        while (!exit) {
+            printOptions();
+            System.out.println("Choose an option (1-11): ");
+            int input = Integer.parseInt(scanner.nextLine());
+            try {
+                exit = decodeUserInput(input);
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+
+    private void addContact() {
+        System.out.println("Enter contact name: ");
+        String name = scanner.nextLine();
+        System.out.println("Enter phone number: ");
+        String phoneNumber = scanner.nextLine();
+        Contact contact = new Contact(name, phoneNumber);
+        this.contacts.add(contact);
+    }
+
+    private void removeContact() {
+        System.out.print("Enter contact name to remove: ");
+        String name = scanner.nextLine();
+        for (int i = 0; i < this.contacts.size(); ++i) {
+            if (this.contacts.get(i).getName().equals(name)) {
+                this.contacts.remove(i);
+                return;
+            }
+        }
+    }
+
+    private void printAllContacts() {
+        for (Contact contact : this.contacts) {
+            System.out.println(contact);
+        }
+    }
+
+    private void searchContact() {
+        System.out.print("Enter contact name to search: ");
+        String name = scanner.nextLine();
+        int counter = 1;
+        for (Contact contact : this.contacts) {
+            if (contact.getName().equals(name)) {
+                System.out.printf("%d. %s - %s", counter, contact.getName(), contact.getPhoneNumber());
+                counter++;
+            }
+        }
+    }
+
+    private void nameLexicographicSort() {
+        this.contacts.sort((a, b) -> a.getName().compareTo(b.getName()));
+    }
+
+    private void numberNumericSort() {
+        this.contacts.sort((a, b) -> b.getPhoneNumber().compareTo(a.getPhoneNumber()));
+    }
+
+    private void removeDuplicateContacts() {
+        for (int i = this.contacts.size() - 1; 0 <= i; --i) {
+            for (Contact contact : this.contacts.subList(0, i)) {
+                if (this.contacts.get(i).equals(contact)) {
+                    this.contacts.remove(i);
+                    break;
+                }
+            }
+        }
+    }
+
+    private void reverseOrder() {
+        Collections.reverse(this.contacts);
+    }
+
+    private void saveToFile() {
+        System.out.println("Enter Path:");
+        String path = scanner.nextLine();
+        try (FileWriter writer = new FileWriter(path)) {
+            for (Contact contact : this.contacts) {
+                writer.write(contact.toString());
+            }
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private void loadFromFile() {
+        System.out.println("Enter file path to load contacts: ");
+        String path = scanner.nextLine();
+        try (BufferedReader reader = new BufferedReader(new FileReader(path))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length == 2) {
+                    Contact contact = new Contact(parts[0], parts[1]);
+                    this.contacts.add(contact);
+                }
+            }
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+    }
 }

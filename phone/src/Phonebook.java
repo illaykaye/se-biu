@@ -117,9 +117,12 @@ public class Phonebook {
         for (Contact contact : this.contacts) {
             if (contact.getName().equals(name)) {
                 System.out.printf("%d. %s - %s", counter, contact.getName(), contact.getPhoneNumber());
+                System.out.println();
                 counter++;
             }
         }
+        if (counter == 1)
+            System.out.println("Contact not found");
     }
 
     private void nameLexicographicSort() {
@@ -150,7 +153,7 @@ public class Phonebook {
         String path = scanner.nextLine();
         try (FileWriter writer = new FileWriter(path)) {
             for (Contact contact : this.contacts) {
-                writer.write(contact.toString());
+                writer.write(contact.toString() + '\n');
             }
         } catch (IOException e) {
             System.out.println(e.getMessage());
@@ -163,7 +166,7 @@ public class Phonebook {
         try (BufferedReader reader = new BufferedReader(new FileReader(path))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(",");
+                String[] parts = line.split(" - ");
                 if (parts.length == 2) {
                     Contact contact = new Contact(parts[0], parts[1]);
                     this.contacts.add(contact);

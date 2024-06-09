@@ -1,3 +1,6 @@
+// Group 4
+package phone.src;
+
 public class Contact {
 	private String name;
 	private String phoneNumber;

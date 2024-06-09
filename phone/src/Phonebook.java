@@ -89,8 +89,14 @@ public class Phonebook {
         String name = scanner.nextLine();
         System.out.println("Enter phone number: ");
         String phoneNumber = scanner.nextLine();
-        Contact contact = new Contact(name, phoneNumber);
-        this.contacts.add(contact);
+        try {
+            int numberCheck = Integer.parseInt(phoneNumber);
+            if (numberCheck < 0 || phoneNumber.length() != 10) throw new Exception();
+            Contact contact = new Contact(name, phoneNumber);
+            this.contacts.add(contact);
+        } catch (Exception e) {
+            System.out.println("Invalid Phone Number");
+        }
     }
 
     private void removeContact() {

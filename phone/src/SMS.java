@@ -51,7 +51,6 @@ public class SMS extends Application {
     }
 
 
-
     private void addMessage() {
     }
 

@@ -9,5 +9,17 @@ public abstract class Application {
 
     protected abstract void printOptions();
 
-    protected abstract void runApp();
+    protected void runApp() {
+        boolean exit = false;
+        while (!exit) {
+            printOptions();
+            System.out.println("Choose an option: ");
+            int input = Integer.parseInt(scanner.nextLine());
+            try {
+                exit = decodeUserInput(input);
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
 }

@@ -74,20 +74,6 @@ public class Phonebook extends Application {
         return false;
     }
 
-    @Override
-    public void runApp() {
-        boolean exit = false;
-        while (!exit) {
-            printOptions();
-            System.out.println("Choose an option (1-11): ");
-            int input = Integer.parseInt(scanner.nextLine());
-            try {
-                exit = decodeUserInput(input);
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-        }
-    }
 
     public ArrayList<Contact> getContacts() {
         return this.contacts;

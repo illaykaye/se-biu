@@ -9,15 +9,16 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
 
-public class Phonebook {
-    private final Scanner scanner = new Scanner(System.in);
+public class Phonebook extends Application {
+    private final Scanner scanner = super.scanner;
     private final ArrayList<Contact> contacts;
 
     public Phonebook() {
         this.contacts = new ArrayList<Contact>();
     }
 
-    private void printOptions() {
+    @Override
+    protected void printOptions() {
         System.out.println("Phonebook:");
         System.out.println("1: Add contact");
         System.out.println("2: Delete contact");
@@ -32,7 +33,8 @@ public class Phonebook {
         System.out.println("11: Exit");
     }
 
-    private boolean decodeUserInput(int input) throws Exception {
+    @Override
+    protected boolean decodeUserInput(int input) throws Exception {
         switch (input) {
             case 1:
                 this.addContact();
@@ -72,18 +74,9 @@ public class Phonebook {
         return false;
     }
 
-    public void runApp() {
-        boolean exit = false;
-        while (!exit) {
-            printOptions();
-            System.out.println("Choose an option (1-11): ");
-            int input = Integer.parseInt(scanner.nextLine());
-            try {
-                exit = decodeUserInput(input);
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-        }
+
+    public ArrayList<Contact> getContacts() {
+        return this.contacts;
     }
 
 
@@ -112,6 +105,7 @@ public class Phonebook {
             }
         }
     }
+
 
     private void printAllContacts() {
         for (Contact contact : this.contacts) {

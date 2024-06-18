@@ -17,11 +17,9 @@ public class Util {
     }
 
     public static String getFileExtension(File file) {
-        String fileName = file.getName();
-        int dotIndex = fileName.lastIndexOf('.');
-        if (dotIndex <= 0 || fileName.length() - 1 <= dotIndex) {
+        if (file == null) {
             return "";
         }
-        return fileName.substring(dotIndex + 1);
+        return getFileExtension(file.getName());
     }
 }

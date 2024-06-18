@@ -1,7 +1,6 @@
 package phone.src;
 
 import java.util.HashSet;
-import java.util.Scanner;
 
 import java.awt.Desktop;
 import java.io.File;
@@ -10,13 +9,12 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.io.IOException;
 
+@SuppressWarnings("unused")
 public class Media extends Application {
-    private final Scanner scan;
     private final Path dirPath;
     private final HashSet<String> supportedFileTypes;
 
     public Media(String dirName) {
-        this.scan = super.scanner;
         File directory = new File(dirName);
         this.supportedFileTypes = new HashSet<>();
         this.supportedFileTypes.add("mp3");
@@ -96,7 +94,7 @@ public class Media extends Application {
         }
 
         System.out.println("Choose a file: ");
-        String fileName = scanner.nextLine();
+        String fileName = this.scanner.nextLine();
         Path filePath = this.dirPath.resolve(fileName);
 
         if (Files.exists(filePath)) {

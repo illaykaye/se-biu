@@ -2,6 +2,8 @@ package phone.src;
 
 import java.util.HashSet;
 import java.util.Scanner;
+
+import java.awt.Desktop;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -92,10 +94,45 @@ public class Media extends Application {
                 System.out.println(file.getName());
             }
         }
+
+        System.out.println("Choose a file: ");
+        String fileName = scanner.nextLine();
+        Path filePath = this.dirPath.resolve(fileName);
+
+        if (Files.exists(filePath)) {
+            try {
+                Desktop.getDesktop().open(filePath.toFile());
+            } catch (IOException e) {
+                System.err.println("Failed to play the file: " + e.getMessage());
+            }
+        } else {
+            System.out.println("File not found: " + fileName);
+        }
     }
 
     private void playAll() {
+        File directory = new File(this.dirPath.toString());
 
+        // Get the list of all files and directories in the specified directory
+        File[] fileList = directory.listFiles();
+
+        // Check if the directory is not empty
+        if (fileList == null) {
+            System.out.println("The directory is empty.");
+            return;
+        }
+
+        // Loop through the files and directories and print their names
+        for (File file : fileList) {
+            // Print only files, not directories
+            if (file.isFile()) {
+                try {
+                    Desktop.getDesktop().open(file);
+                } catch (IOException e) {
+                    System.err.println("Failed to play the file: " + e.getMessage());
+                }
+            }
+        }
     }
 
 }

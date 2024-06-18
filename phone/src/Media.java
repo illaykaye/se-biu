@@ -90,7 +90,7 @@ public class Media extends Application {
         // Loop through the files and directories and print their names
         for (File file : fileList) {
             // Print only files, not directories
-            if (file.isFile()) {
+            if (file.isFile() && this.supportedFileTypes.contains(Util.getFileExtension(file))) {
                 System.out.println(file.getName());
             }
         }

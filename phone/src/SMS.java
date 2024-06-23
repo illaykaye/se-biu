@@ -5,11 +5,13 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 public class SMS extends Application {
-    private final Scanner scan = super.scanner;
+    private final Scanner scanner = super.scanner;
     private final HashMap<String, ArrayList<String>> messages = new HashMap<String, ArrayList<String>>();
+    private final Phonebook phonebook;
     private final ArrayList<Contact> contacts;
 
     public SMS(Phonebook phonebook) {
+        this.phonebook = phonebook;
         contacts = phonebook.getContacts();
     }
 
@@ -49,39 +51,26 @@ public class SMS extends Application {
         System.out.println("5: Print all messages");
         System.out.println("6: Exit");
     }
-    
-    private Contact findContactByNameAndPhoneNumber(String name, String phoneNumber) {
-        for (Contact contact : contacts) {
-            if (contact.getName().equals(name) && contact.getPhoneNumber().equals(phoneNumber)) {
-                return contact;
-            }
-        }
-        return null;
-    }
 
-	private void addMessage() {
+    private void addMessage() {
         System.out.println("Enter contact name:");
-        String name = scan.nextLine();
-        
-        System.out.println("Enter phone number:");
-        String phoneNumber = scan.nextLine();
-        
-        Contact contact = findContactByNameAndPhoneNumber(name, phoneNumber);
+        String name = scanner.nextLine();
+
+        Contact contact = phonebook.searchContact(name);
         if (contact == null) {
             System.out.println("Contact not found. Canceling the message...");
             System.out.println("Error adding contact");
             return;
-            }
-        
+        }
+
         System.out.println("Enter correspondence message:");
-        String message = scan.nextLine();
-        
-        String key = name + ":" + phoneNumber;
+        String message = scanner.nextLine();
+
         ArrayList<String> messageList;
         boolean isFirstMessage;
 
-        if (messages.containsKey(key)) {
-            messageList = messages.get(key);
+        if (messages.containsKey(name)) {
+            messageList = messages.get(name);
             isFirstMessage = false;
         } else {
             messageList = new ArrayList<>();
@@ -89,58 +78,47 @@ public class SMS extends Application {
         }
 
         messageList.add(message);
-        messages.put(key, messageList);
+        messages.put(name, messageList);
 
         if (isFirstMessage) {
             System.out.println("New chat opened with " + contact.getName() + ". Message: " + message);
-        } 
-        else {
+        } else {
             System.out.println("Message added to existing chat with " + contact.getName() + ": " + message);
         }
     }
 
     private void removeMessage() {
-	    System.out.println("Enter contact name:");
-	    String name = scan.nextLine();
+        System.out.println("Enter contact name:");
+        String name = scanner.nextLine();
 
-	    System.out.println("Enter phone number:");
-	    String phoneNumber = scan.nextLine();
+        Contact contact = phonebook.searchContact(name);
+        if (contact == null) {
+            System.out.println("Contact not found. Canceling the removal...");
+            System.out.println("Error removing messages");
+            return;
+        }
 
-	    Contact contact = findContactByNameAndPhoneNumber(name, phoneNumber);
-	    if (contact == null) {
-	        System.out.println("Contact not found. Canceling the removal...");
-	        System.out.println("Error removing messages");
-	        return;
-	    }
+        if (!messages.containsKey(name)) {
+            System.out.println("No messages found for this contact.");
+            return;
+        }
 
-	    String key = name + ":" + phoneNumber;
-
-	    if (!messages.containsKey(key)) {
-	        System.out.println("No messages found for this contact.");
-	        return;
-	    }
-
-	    messages.remove(key);
-	    System.out.println("All messages removed for contact " + contact.getName());
-	}
+        messages.remove(name);
+        System.out.println("All messages removed for contact " + contact.getName());
+    }
 
     private void printContactMessage() {
         System.out.println("Enter contact name:");
-        String name = scan.nextLine();
+        String name = scanner.nextLine();
 
-        System.out.println("Enter phone number:");
-        String phoneNumber = scan.nextLine();
+        Contact contact = phonebook.searchContact(name);
 
-        Contact contact = findContactByNameAndPhoneNumber(name, phoneNumber);
-        
-        String key = name + ":" + phoneNumber;
-
-        if (!messages.containsKey(key)) {
+        if (!messages.containsKey(name)) {
             System.out.println("No messages found for contact " + contact.getName());
             return;
         }
 
-        ArrayList<String> messageList = messages.get(key);
+        ArrayList<String> messageList = messages.get(name);
         System.out.println("Correspondence with " + contact.getName() + ":");
         for (String message : messageList) {
             System.out.println(message);
@@ -148,9 +126,22 @@ public class SMS extends Application {
     }
 
     private void searchMessage() {
+        System.out.println("Enter message to search:");
+        String message = scanner.nextLine();
+        for (Contact contact : contacts) {
+            if (messages.get(contact.getName()) != null && messages.get(contact.getName()).contains(message)) {
+                System.out.println(contact.getName());
+            }
+        }
     }
 
     private void printAllMessages() {
+        for (Contact contact : contacts) {
+            if (messages.containsKey(contact.getName()))
+                System.out.println(contact.getName() + ":" + messages.get(contact.getName()));
+            else
+                System.out.println(contact.getName() + ":[]");
+        }
     }
 
 

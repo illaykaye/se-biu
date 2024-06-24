@@ -4,12 +4,19 @@ import java.util.Scanner;
 
 public abstract class Application {
     protected final Scanner scanner = new Scanner(System.in);
+    protected String appName;
 
     protected abstract boolean decodeUserInput(int input) throws Exception;
 
     protected abstract void printOptions();
 
-    protected void runApp() {
+    protected abstract void printAllData();
+
+    protected String getAppName() {
+        return this.appName;
+    }
+
+    public void runApp() {
         boolean exit = false;
         while (!exit) {
             printOptions();

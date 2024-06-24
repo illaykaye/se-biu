@@ -1,16 +1,19 @@
 package phone.src;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class Calendar extends Application {
 
     private final Scanner scanner = super.scanner;
-    private final LinkedList<Event>[] days;
+    private final LinkedList<Event>[] calendar;
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 
     public Calendar() {
-        this.days = new LinkedList[30];
-        for (int i = 0; i < 30; i++) days[i] = new LinkedList<>(); // initialize each day
+        super();
+        this.calendar = new LinkedList[30];
+        for (int i = 0; i < 30; i++) calendar[i] = new LinkedList<>(); // initialize each day
     }
 
     @Override
@@ -24,7 +27,12 @@ public class Calendar extends Application {
         System.out.println("6: Print all events");
         System.out.println("7: Exit");
     }
-    
+
+    @Override
+    protected void printAllData() {
+
+    }
+
     @Override
     protected boolean decodeUserInput(int input) throws Exception {
         switch (input) {
@@ -54,26 +62,76 @@ public class Calendar extends Application {
         return false;
     }
 
+    private LinkedList<Event> getDay(int day) {
+        return this.calendar[day];
+    }
+
     private void printEvents() {
-        System.out.println(Arrays.toString(this.days));
+        System.out.println(Arrays.toString(this.calendar));
     }
 
     private void overlaps() {
+
     }
 
-    private void meetingsWith() {
+    private void meetingsWith() throws Exception {
+        System.out.println("Enter contact name: ");
+        String contactName = scanner.nextLine();
+        // search contact in phonebook
+        // throw exception if doesnt exist
+        boolean foundMeeting = false;
+        for (LinkedList<Event> calDay : this.calendar) {
+            for (Event e : calDay) {
+                if (e.getContact().getName().equals(contactName)) {
+                    System.out.println(e);
+                    foundMeeting = true;
+                }
+            }
+        }
+        if (!foundMeeting) System.out.println("There no meetings with " + contactName);
     }
 
     private void eventsAt() {
+        System.out.println("Enter day of the month: ");
+        int day = scanner.nextInt();
+        LinkedList<Event> calDay = this.getDay(day);
+        Iterator<Event> iter = calDay.iterator();
+        System.out.println("Events at day: \n");
+        while (iter.hasNext()) System.out.println(iter.next());
     }
 
-    private void deleteEvent() {
+    private boolean deleteEvent(Date date) {
+        LinkedList<Event> calDay = this.getDay(date.getDay());
+        for (Event e : calDay) {
+            if (e.isDate(date)) {
+                return calDay.remove(e);
+            }
+        }
+        return false;
+    }
+
+    private void deleteEvent() throws ParseException {
         System.out.println("Enter date and time of event to delete (dd/MM/yyyy HH:mm): ");
         String dateString = scanner.nextLine();
-
+        Date date = dateFormat.parse(dateString);
+        LinkedList<Event> calDay = this.getDay(date.getDay());
+        Event eve = null;
+        boolean removed = false;
+        for (Event e : calDay) {
+            if (e.isDate(dateString)) {
+                eve = e;
+                removed = calDay.remove(e);
+                break;
+            }
+        }
+        if (!removed) {
+            System.out.println("Event at specified date not found.");
+        } else {
+            System.out.println(eve + "deleted successfully.");
+        }
     }
 
-    private void addEvent() {
+    private void addEvent() throws ParseException {
         Event event = null;
         System.out.println("Meeting or event [m/e]? ");
         String me = scanner.nextLine();
@@ -83,18 +141,15 @@ public class Calendar extends Application {
 
         System.out.println("Enter length (minutes): ");
         int lengthInMinutes = scanner.nextInt();
-        try {
-            if (me.equals("m")) {
-                System.out.println("Enter contact name: ");
-                // search contact
-                // if not exists throw exception
-            } else if (me.equals("e")) {
-                System.out.println("Enter event description: ");
-                String description = scanner.nextLine();
-                event = new Event(dateString, lengthInMinutes, description);
-            }
-        } catch (ParseException e) {
-            System.out.println("Invalid date format");
+
+        if (me.equals("m")) {
+            System.out.println("Enter contact name: ");
+            // search contact
+            // if not exists throw exception
+        } else if (me.equals("e")) {
+            System.out.println("Enter event description: ");
+            String description = scanner.nextLine();
+            event = new Event(dateString, lengthInMinutes, description);
         }
 
         // add event to cal

@@ -58,4 +58,28 @@ public class Event {
         }
         return description;
     }
+
+    public boolean isDate(String date) throws ParseException {
+        return (this.getDate().equals(dateFormat.parse(date)));
+    }
+
+    public boolean isDate(Date date) {
+        return (this.getDate().equals(date));
+    }
+
+    @Override
+    public String toString() {
+        String str = "";
+        str += (this.getEventType() == EventType.MEETING) ? "Meeting: " : "Event: ";
+        str += "date: ";
+        str += this.getDate();
+        str += ", length: ";
+        str += this.getLengthInMinutes();
+        try {
+            str += (this.getEventType() == EventType.MEETING) ? this.getContact().getName() : this.getDescription();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return str;
+    }
 }

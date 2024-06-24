@@ -12,7 +12,7 @@ import java.util.Scanner;
 public class Phonebook extends Application {
     private final Scanner scanner = super.scanner;
     private final ArrayList<Contact> contacts;
-
+    private final String appName = "Phonebook";
     public Phonebook() {
         this.contacts = new ArrayList<Contact>();
     }
@@ -31,6 +31,11 @@ public class Phonebook extends Application {
         System.out.println("9: Save phonebook");
         System.out.println("10: Load contacts");
         System.out.println("11: Exit");
+    }
+
+    @Override
+    protected void printAllData() {
+
     }
 
     @Override

@@ -1,9 +1,10 @@
 package main;
-import phone.*;;
+
+import phone.src.*;
 
 public class Main {
     public static void main(String[] args) {
         Phonebook pb = new Phonebook();
-        pb.run();
+        pb.runApp();
     }
 }

@@ -14,6 +14,7 @@ public class Phonebook extends Application {
     private final ArrayList<Contact> contacts;
 
     public Phonebook() {
+        //noinspection Convert2Diamond
         this.contacts = new ArrayList<Contact>();
     }
 
@@ -129,6 +130,7 @@ public class Phonebook extends Application {
     }
 
     private void nameLexicographicSort() {
+        //noinspection ComparatorCombinators
         this.contacts.sort((a, b) -> a.getName().compareTo(b.getName()));
     }
 

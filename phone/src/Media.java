@@ -1,5 +1,5 @@
 // Group 4
-package phone;
+package phone.src;
 
 import java.util.HashSet;
 import java.util.HashMap;

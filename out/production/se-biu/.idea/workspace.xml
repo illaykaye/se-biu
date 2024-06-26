@@ -6,6 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="ef8ef85d-4347-4e7d-814b-12faee5299f3" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/phone/src/Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/phone/src/Application.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/phone/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/phone/src/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/phone/src/Phonebook.java" beforeDir="false" afterPath="$PROJECT_DIR$/phone/src/Phonebook.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/phone/src/SMS.java" beforeDir="false" afterPath="$PROJECT_DIR$/phone/src/SMS.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -34,6 +38,9 @@
     &quot;accountId&quot;: &quot;8b5f05ca-898a-46de-ab4d-c9ce47e40c0a&quot;
   }
 }</component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="jar://$PROJECT_DIR$/../../../../../Program Files/Eclipse Adoptium/jdk-11.0.19.7-hotspot/lib/src.zip!/java.base/java/util/ArrayList.java" root0="SKIP_INSPECTION" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
   &quot;associatedIndex&quot;: 2
@@ -43,25 +50,35 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "SMS",
-    "ignore.virus.scanning.warn.message": "true",
-    "kotlin-language-version-configured": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;SMS&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
+  <component name="RunManager">
+    <configuration name="Main" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="phone.src.Main" />
+      <module name="se-biu" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9f38398b9061-39b83d9b5494-intellij.indexing.shared.core-IU-241.17011.79" />
-        <option value="bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-IU-241.17011.79" />
+        <option value="bundled-jdk-9f38398b9061-39b83d9b5494-intellij.indexing.shared.core-IU-241.18034.62" />
+        <option value="bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-IU-241.18034.62" />
       </set>
     </attachedChunks>
   </component>
@@ -79,6 +96,13 @@
       <workItem from="1718536267428" duration="1292000" />
       <workItem from="1718537669095" duration="51000" />
       <workItem from="1718537739128" duration="1380000" />
+      <workItem from="1718551205409" duration="106000" />
+      <workItem from="1718713614837" duration="21000" />
+      <workItem from="1718887468561" duration="1252000" />
+      <workItem from="1718888758614" duration="634000" />
+      <workItem from="1718898032872" duration="4336000" />
+      <workItem from="1719128313873" duration="784000" />
+      <workItem from="1719136353632" duration="629000" />
     </task>
     <servers />
   </component>

@@ -1,7 +1,8 @@
 // Group 4
-package phone.src;
+package phone;
 
 import java.util.HashSet;
+import java.util.HashMap;
 
 import java.awt.Desktop;
 import java.io.File;
@@ -14,12 +15,14 @@ import java.io.IOException;
 public class Media extends Application {
     private final Path dirPath;
     private final HashSet<String> supportedFileTypes;
+    private final HashMap<String, Integer> videoLengths;
 
     public Media(String dirName) {
         File directory = new File(dirName);
         this.supportedFileTypes = new HashSet<>();
         this.supportedFileTypes.add("mp3");
         this.supportedFileTypes.add("mp4");
+        this.videoLengths = new HashMap<>();
 
         if (directory.mkdir()) {
             System.out.println("Directory created successfully!");
@@ -60,16 +63,32 @@ public class Media extends Application {
     }
 
     private void addFile() {
-        System.out.println("Enter path of new file: ");
+        System.out.println("Enter path of new MP3/MP4 file: ");
         Path filePath = Paths.get(scanner.nextLine());
+        System.out.println("Enter the file's length in seconds: ");
+        String lenStr = scanner.nextLine();
+        int fileLen = 0;
+        if (isInteger(lenStr)) {
+            fileLen = Integer.parseInt(lenStr);
+        }
 
         Path targetFile = this.dirPath.resolve(filePath.getFileName());
 
         try {
             Files.copy(filePath, targetFile);
+            this.videoLengths.put(filePath.getFileName().toString(), fileLen);
         }
         catch (IOException e) {
             System.err.println("Failed to copy the file: " + e.getMessage());
+        }
+    }
+
+    private static boolean isInteger(String s) {
+        try {
+            Integer.parseInt(s);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
         }
     }
 
@@ -101,6 +120,13 @@ public class Media extends Application {
         if (Files.exists(filePath)) {
             try {
                 Desktop.getDesktop().open(filePath.toFile());
+                int fileLen = videoLengths.get(fileName);
+                if (fileLen == 0) {
+                    System.out.println(fileName + "is now playing for unknown amount of time.");
+                }
+                else {
+                    System.out.println(fileName + "is now playing for " + fileLen + " seconds.");
+                }
             } catch (IOException e) {
                 System.err.println("Failed to play the file: " + e.getMessage());
             }
@@ -123,10 +149,18 @@ public class Media extends Application {
 
         // Loop through the files and directories and print their names
         for (File file : fileList) {
+            String fileName = file.getName();
             // Print only files, not directories
             if (file.isFile()) {
                 try {
                     Desktop.getDesktop().open(file);
+                    int fileLen = videoLengths.get(fileName);
+                    if (fileLen == 0) {
+                        System.out.println(fileName + "is now playing for unknown amount of time.");
+                    }
+                    else {
+                        System.out.println(fileName + "is now playing for " + fileLen + " seconds.");
+                    }
                 } catch (IOException e) {
                     System.err.println("Failed to play the file: " + e.getMessage());
                 }

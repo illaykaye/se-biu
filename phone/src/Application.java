@@ -14,8 +14,8 @@ public abstract class Application {
         while (!exit) {
             printOptions();
             System.out.println("Choose an option: ");
-            int input = Integer.parseInt(scanner.nextLine());
             try {
+                int input = Integer.parseInt(scanner.nextLine());
                 exit = decodeUserInput(input);
             } catch (Exception e) {
                 System.out.println(e.getMessage());

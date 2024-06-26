@@ -87,11 +87,12 @@ public class Phonebook extends Application {
         String phoneNumber = scanner.nextLine();
         try {
             int numberCheck = Integer.parseInt(phoneNumber);
-            if (numberCheck < 0 || phoneNumber.length() != 10) throw new Exception();
+            if (numberCheck < 0 || phoneNumber.length() != 10) throw new Exception("Invalid Phone Number");
             Contact contact = new Contact(name, phoneNumber);
-            this.contacts.add(contact);
+            if (contacts.contains(contact)) throw new Exception("Duplicate Contact");
+            contacts.add(contact);
         } catch (Exception e) {
-            System.out.println("Invalid Phone Number");
+            System.out.println(e.getMessage());
         }
     }
 
@@ -113,6 +114,15 @@ public class Phonebook extends Application {
         }
     }
 
+    public Contact searchContact(String name) {
+        for (Contact contact : contacts) {
+            if (contact.getName().equals(name)) {
+                return contact;
+            }
+        }
+        return null;
+    }
+
     private void searchContact() {
         System.out.print("Enter contact name to search: ");
         String name = scanner.nextLine();
@@ -127,6 +137,7 @@ public class Phonebook extends Application {
         if (counter == 1)
             System.out.println("Contact not found");
     }
+
 
     private void nameLexicographicSort() {
         this.contacts.sort((a, b) -> a.getName().compareTo(b.getName()));

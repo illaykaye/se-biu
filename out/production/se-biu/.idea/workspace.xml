@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="ef8ef85d-4347-4e7d-814b-12faee5299f3" name="Changes" comment="Add event fixed">
+      <change beforePath="$PROJECT_DIR$/.classpath" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.project" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/se-biu/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/se-biu/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/se-biu/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/se-biu/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/se-biu/phone/src/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/se-biu/phone/src/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/phone/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/phone/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/phone/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/phone/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/phone/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/phone/src/Media.java" beforeDir="false" afterPath="$PROJECT_DIR$/phone/src/Media.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/phone/src/Phone.java" beforeDir="false" afterPath="$PROJECT_DIR$/phone/src/Phone.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/phone/src/SMS.java" beforeDir="false" afterPath="$PROJECT_DIR$/phone/src/SMS.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <excluded-from-favorite>
+      <branch-storage>
+        <map>
+          <entry type="LOCAL">
+            <value>
+              <list>
+                <branch-info repo="$PROJECT_DIR$" source="master" />
+              </list>
+            </value>
+          </entry>
+        </map>
+      </branch-storage>
+    </excluded-from-favorite>
+    <favorite-branches>
+      <branch-storage>
+        <map>
+          <entry type="LOCAL">
+            <value>
+              <list>
+                <branch-info repo="$PROJECT_DIR$" source="calendar" />
+              </list>
+            </value>
+          </entry>
+        </map>
+      </branch-storage>
+    </favorite-branches>
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;lycaon7&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/illaykaye/se-biu.git&quot;,
+    &quot;accountId&quot;: &quot;8b5f05ca-898a-46de-ab4d-c9ce47e40c0a&quot;
+  }
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 2
+}</component>
+  <component name="ProjectId" id="2hUsuOJgG5SmJdyOvHoeWH40Xti" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "master",
+    "ignore.virus.scanning.warn.message": "true",
+    "kotlin-language-version-configured": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.general",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RunManager">
+    <configuration name="main" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="phone.src.Main" />
+      <module name="se-biu" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9f38398b9061-39b83d9b5494-intellij.indexing.shared.core-IU-241.18034.62" />
+        <option value="bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-IU-241.18034.62" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="ef8ef85d-4347-4e7d-814b-12faee5299f3" name="Changes" comment="" />
+      <created>1717660213292</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1717660213292</updated>
+      <workItem from="1717660214759" duration="39000" />
+      <workItem from="1717679049046" duration="13000" />
+      <workItem from="1717927955356" duration="120000" />
+      <workItem from="1718536267428" duration="1292000" />
+      <workItem from="1718537669095" duration="51000" />
+      <workItem from="1718537739128" duration="1380000" />
+      <workItem from="1719501259037" duration="57000" />
+    </task>
+    <task id="LOCAL-00001" summary="calendar">
+      <option name="closed" value="true" />
+      <created>1719423263685</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1719423263685</updated>
+    </task>
+    <task id="LOCAL-00002" summary="overlaps calendar">
+      <option name="closed" value="true" />
+      <created>1719496971467</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1719496971467</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Add event fixed">
+      <option name="closed" value="true" />
+      <created>1719498406883</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1719498406883</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="calendar" />
+    <MESSAGE value="overlaps calendar" />
+    <MESSAGE value="Add event fixed" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add event fixed" />
+  </component>
+</project>

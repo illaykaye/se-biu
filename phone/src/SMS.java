@@ -92,7 +92,7 @@ public class SMS extends Application {
         }
     }
 
-    private void removeMessage() {
+    public void removeMessage() {
         System.out.println("Enter contact name:");
         String name = scanner.nextLine();
 

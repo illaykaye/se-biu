@@ -6,11 +6,13 @@ import java.util.*;
 
 public class Calendar extends Application {
     private final LinkedList<Event>[] calendar;
+    private int numEvents;
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 
     public Calendar() {
         super();
         this.calendar = new LinkedList[30];
+        this.numEvents = 0;
         for (int i = 0; i < 30; i++) calendar[i] = new LinkedList<>(); // initialize each day
     }
 
@@ -28,9 +30,7 @@ public class Calendar extends Application {
 
     @Override
     protected void printAllData() {
-        for (LinkedList<Event> calDay : this.calendar) {
-            for (Event e : calDay) System.out.println(e);
-        }
+        this.printAllEvents();
     }
 
     @Override
@@ -64,6 +64,18 @@ public class Calendar extends Application {
 
     public LinkedList<Event> getDay(int day) {
         return this.calendar[day];
+    }
+
+    private void printAllEvents() {
+        if (this.numEvents == 0) {
+            System.out.println("No events in calendar.");
+            return;
+        }
+        for (LinkedList<Event> calDay : this.calendar) {
+            if (calDay.isEmpty()) continue;
+            System.out.println("Day: " + calDay.getFirst().getDayOfTheMonth());
+            for (Event e : calDay) System.out.println(e);
+        }
     }
 
     private void overlaps() {
@@ -107,10 +119,10 @@ public class Calendar extends Application {
 
     private void eventsAt() {
         System.out.println("Enter day of the month: ");
-        int day = scanner.nextInt();
+        int day = Integer.parseInt(scanner.nextLine());
         LinkedList<Event> calDay = this.getDay(day);
         Iterator<Event> iter = calDay.iterator();
-        System.out.println("Events at day: \n");
+        System.out.printf("Events at day %d: \n", day);
         while (iter.hasNext()) System.out.println(iter.next());
     }
 
@@ -120,7 +132,24 @@ public class Calendar extends Application {
         return cal.get(java.util.Calendar.DAY_OF_MONTH);
     }
 
+    public void deleteContactEvents(String contactName) throws Exception {
+        for (LinkedList<Event> calDay : this.calendar) {
+            ListIterator<Event> iter = calDay.listIterator();
+            while (iter.hasNext()) {
+                Event e = iter.next();
+                if (e.getEventType() == Event.EventType.MEETING && e.getContact().getName().equals(contactName)) {
+                    iter.remove();
+                    this.numEvents--;
+                }
+            }
+        }
+    }
+
     private void deleteEvent() throws ParseException {
+        if (this.numEvents == 0) {
+            System.out.println("No events in calendar.");
+            return;
+        }
         System.out.println("Enter date and time of event to delete (dd/MM/yyyy HH:mm): ");
         String dateString = scanner.nextLine();
         Date date = dateFormat.parse(dateString);
@@ -137,7 +166,8 @@ public class Calendar extends Application {
         if (!removed) {
             System.out.println("Event at specified date not found.");
         } else {
-            System.out.println(eve + "deleted successfully.");
+            System.out.println(eve + " deleted successfully.");
+            this.numEvents--;
         }
     }
 
@@ -150,7 +180,7 @@ public class Calendar extends Application {
         String dateString = scanner.nextLine();
 
         System.out.println("Enter length (minutes): ");
-        int lengthInMinutes = scanner.nextInt();
+        int lengthInMinutes = Integer.parseInt(scanner.nextLine());
 
         if (me.equals("m")) {
             System.out.println("Enter contact name: ");
@@ -177,5 +207,6 @@ public class Calendar extends Application {
         if (!added) {
             iter.add(event);
         }
+        this.numEvents++;
     }
 }

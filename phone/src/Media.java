@@ -62,6 +62,11 @@ public class Media extends Application {
         System.out.println("4: Exit");
     }
 
+    @Override
+    protected void printAllData() {
+
+    }
+
     private void addFile() {
         System.out.println("Enter path of new MP3/MP4 file: ");
         Path filePath = Paths.get(scanner.nextLine());

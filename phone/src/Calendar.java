@@ -132,6 +132,19 @@ public class Calendar extends Application {
         return cal.get(java.util.Calendar.DAY_OF_MONTH);
     }
 
+    public void deleteContactEvents(String contactName) throws Exception {
+        for (LinkedList<Event> calDay : this.calendar) {
+            ListIterator<Event> iter = calDay.listIterator();
+            while (iter.hasNext()) {
+                Event e = iter.next();
+                if (e.getEventType() == Event.EventType.MEETING && e.getContact().getName().equals(contactName)) {
+                    iter.remove();
+                    this.numEvents--;
+                }
+            }
+        }
+    }
+
     private void deleteEvent() throws ParseException {
         if (this.numEvents == 0) {
             System.out.println("No events in calendar.");

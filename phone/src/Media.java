@@ -64,7 +64,7 @@ public class Media extends Application {
 
     @Override
     public void onContactRemoval() {
-        throw new UnsupportedOperationException("Not implemented, yet.");
+        // nop. Media has no relation to the contacts
     }
 
     private void addFile() {

@@ -10,7 +10,7 @@ public abstract class Application {
 
     protected abstract void printOptions();
 
-    protected void runApp() {
+    public void runApp() {
         boolean exit = false;
         while (!exit) {
             printOptions();

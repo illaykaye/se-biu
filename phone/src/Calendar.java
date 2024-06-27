@@ -5,8 +5,6 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class Calendar extends Application {
-
-    private final Scanner scanner = super.scanner;
     private final LinkedList<Event>[] calendar;
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 
@@ -30,7 +28,9 @@ public class Calendar extends Application {
 
     @Override
     protected void printAllData() {
-
+        for (LinkedList<Event> calDay : this.calendar) {
+            for (Event e : calDay) System.out.println(e);
+        }
     }
 
     @Override
@@ -52,7 +52,7 @@ public class Calendar extends Application {
                 this.overlaps();
                 break;
             case 6:
-                this.printEvents();
+                this.printAllData();
                 break;
             case 7:
                 return true;
@@ -66,19 +66,33 @@ public class Calendar extends Application {
         return this.calendar[day];
     }
 
-    private void printEvents() {
-        System.out.println(Arrays.toString(this.calendar));
+    private void overlaps() {
+        for (int i = 0; i < 30; i++) {
+            overlapsDay(i);
+        }
     }
 
-    private void overlaps() {
+    private void overlapsDay(int dayIndex) {
+        LinkedList<Event> day = this.getDay(dayIndex);
+        ListIterator<Event> iter = day.listIterator();
+        if (!iter.hasNext()) return;
 
+        Event prevEvent = iter.next();
+        while (iter.hasNext()) {
+            Event currentEvent = iter.next();
+            if (prevEvent.overlapsWith(currentEvent)) {
+                iter.remove();
+            } else {
+                prevEvent = currentEvent;
+            }
+        }
     }
 
     private void meetingsWith() throws Exception {
         System.out.println("Enter contact name: ");
         String contactName = scanner.nextLine();
         // search contact in phonebook
-        // throw exception if doesnt exist
+        // throw exception if doesn't exist
         boolean foundMeeting = false;
         for (LinkedList<Event> calDay : this.calendar) {
             for (Event e : calDay) {
@@ -100,6 +114,7 @@ public class Calendar extends Application {
         while (iter.hasNext()) System.out.println(iter.next());
     }
 
+    /*
     private boolean deleteEvent(Date date) {
         LinkedList<Event> calDay = this.getDay(date.getDay());
         for (Event e : calDay) {
@@ -109,7 +124,7 @@ public class Calendar extends Application {
         }
         return false;
     }
-
+    */
     private void deleteEvent() throws ParseException {
         System.out.println("Enter date and time of event to delete (dd/MM/yyyy HH:mm): ");
         String dateString = scanner.nextLine();
@@ -152,6 +167,7 @@ public class Calendar extends Application {
             event = new Event(dateString, lengthInMinutes, description);
         }
 
-        // add event to cal
+        LinkedList<Event> calDay = this.getDay(event.getStartTime().getDay());
+        ListIterator<Event> list = calDay.listIterator();
     }
 }

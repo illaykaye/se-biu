@@ -4,7 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class Event {
+public class Event implements Comparable<Event> {
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 
     public enum EventType {
@@ -12,7 +12,7 @@ public class Event {
     }
 
     private final EventType eventType;
-    private final Date date;
+    private final Date startTime;
     private final int lengthInMinutes;
     private Contact contact;
     private String description;
@@ -21,7 +21,7 @@ public class Event {
     public Event(String date, int lengthInMinutes, Contact contact) throws ParseException {
         this.eventType = EventType.MEETING;
         this.lengthInMinutes = lengthInMinutes;
-        this.date = dateFormat.parse(date);
+        this.startTime = dateFormat.parse(date);
         this.contact = contact;
     }
 
@@ -29,7 +29,7 @@ public class Event {
     public Event(String date, int lengthInMinutes, String description) throws ParseException {
         this.eventType = EventType.GENERAL;
         this.lengthInMinutes = lengthInMinutes;
-        this.date = dateFormat.parse(date);
+        this.startTime = dateFormat.parse(date);
         this.description = description;
     }
 
@@ -37,8 +37,8 @@ public class Event {
         return eventType;
     }
 
-    public Date getDate() {
-        return date;
+    public Date getStartTime() {
+        return startTime;
     }
 
     public int getLengthInMinutes() {
@@ -60,19 +60,31 @@ public class Event {
     }
 
     public boolean isDate(String date) throws ParseException {
-        return (this.getDate().equals(dateFormat.parse(date)));
+        return (this.getStartTime().equals(dateFormat.parse(date)));
     }
 
     public boolean isDate(Date date) {
-        return (this.getDate().equals(date));
+        return (this.getStartTime().equals(date));
     }
 
+    public Date getEndTime() {
+        return new Date(this.getStartTime().getTime()+ (long) this.getLengthInMinutes() *60*1000);
+    }
+    public boolean overlapsWith(Event e) {
+        return (this.startTime.before(e.getEndTime()) && this.getEndTime().after(e.startTime));
+    }
+
+    @Override
+    public int compareTo(Event o) {
+        return this.getStartTime().compareTo(o.getStartTime());
+    }
+    /*
     @Override
     public String toString() {
         String str = "";
         str += (this.getEventType() == EventType.MEETING) ? "Meeting: " : "Event: ";
         str += "date: ";
-        str += this.getDate();
+        str += this.getStartTime();
         str += ", length: ";
         str += this.getLengthInMinutes();
         try {
@@ -81,5 +93,36 @@ public class Event {
             throw new RuntimeException(e);
         }
         return str;
+    }*/
+    public String toString() {
+        StringBuilder str = new StringBuilder();
+
+        str.append((this.getEventType() == EventType.MEETING) ? "Meeting: " : "Event: ");
+        str.append("date: ");
+        str.append(dateFormat.format(this.getStartTime()));
+        str.append(", length: ");
+        str.append(this.getLengthInMinutes()).append(" minutes, ");
+
+        try {
+            if (this.getEventType() == EventType.MEETING) {
+                Contact contact = this.getContact();
+                if (contact != null) {
+                    str.append("Contact: ").append(contact.getName());
+                } else {
+                    str.append("No contact available");
+                }
+            } else {
+                String description = this.getDescription();
+                if (description != null && !description.isEmpty()) {
+                    str.append("Description: ").append(description);
+                } else {
+                    str.append("No description available");
+                }
+            }
+        } catch (Exception e) {
+            str.append("Error: ").append(e.getMessage());
+        }
+
+        return str.toString();
     }
 }

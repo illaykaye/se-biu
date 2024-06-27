@@ -1,0 +1,656 @@
+Index: phone/src/Media.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>// Group 4\r\npackage phone.src;\r\n\r\nimport java.util.HashSet;\r\nimport java.util.HashMap;\r\n\r\nimport java.awt.Desktop;\r\nimport java.io.File;\r\nimport java.nio.file.Files;\r\nimport java.nio.file.Path;\r\nimport java.nio.file.Paths;\r\nimport java.io.IOException;\r\n\r\n@SuppressWarnings(\"unused\")\r\npublic class Media extends Application {\r\n    private final Path dirPath;\r\n    private final HashSet<String> supportedFileTypes;\r\n    private final HashMap<String, Integer> videoLengths;\r\n\r\n    public Media(String dirName) {\r\n        File directory = new File(dirName);\r\n        this.supportedFileTypes = new HashSet<>();\r\n        this.supportedFileTypes.add(\"mp3\");\r\n        this.supportedFileTypes.add(\"mp4\");\r\n        this.videoLengths = new HashMap<>();\r\n\r\n        if (directory.mkdir()) {\r\n            System.out.println(\"Directory created successfully!\");\r\n        }\r\n        else {\r\n            System.out.println(\"Failed to create the directory.\");\r\n        }\r\n        dirPath = Paths.get(dirName);\r\n    }\r\n\r\n    @Override\r\n    protected boolean decodeUserInput(int input) throws Exception {\r\n        switch (input) {\r\n            case 1:\r\n                this.addFile();\r\n                break;\r\n            case 2:\r\n                this.playByName();\r\n                break;\r\n            case 3:\r\n                this.playAll();\r\n                break;\r\n            case 4:\r\n                return true;\r\n            default:\r\n                throw new Exception(\"Invalid Option\");\r\n        }\r\n        return false;\r\n    }\r\n\r\n    @Override\r\n    protected void printOptions() {\r\n        System.out.println(\"Media:\");\r\n        System.out.println(\"1: Add media file\");\r\n        System.out.println(\"2: Play specific file\");\r\n        System.out.println(\"3: Play all\");\r\n        System.out.println(\"4: Exit\");\r\n    }\r\n\r\n    @Override\r\n    protected void printAllData() {\r\n\r\n    }\r\n\r\n    private void addFile() {\r\n        System.out.println(\"Enter path of new MP3/MP4 file: \");\r\n        Path filePath = Paths.get(scanner.nextLine());\r\n        System.out.println(\"Enter the file's length in seconds: \");\r\n        String lenStr = scanner.nextLine();\r\n        int fileLen = 0;\r\n        if (isInteger(lenStr)) {\r\n            fileLen = Integer.parseInt(lenStr);\r\n        }\r\n\r\n        Path targetFile = this.dirPath.resolve(filePath.getFileName());\r\n\r\n        try {\r\n            Files.copy(filePath, targetFile);\r\n            this.videoLengths.put(filePath.getFileName().toString(), fileLen);\r\n        }\r\n        catch (IOException e) {\r\n            System.err.println(\"Failed to copy the file: \" + e.getMessage());\r\n        }\r\n    }\r\n\r\n    private static boolean isInteger(String s) {\r\n        try {\r\n            Integer.parseInt(s);\r\n            return true;\r\n        } catch (NumberFormatException e) {\r\n            return false;\r\n        }\r\n    }\r\n\r\n    private void playByName() {\r\n        // Create a File object\r\n        File directory = new File(this.dirPath.toString());\r\n\r\n        // Get the list of all files and directories in the specified directory\r\n        File[] fileList = directory.listFiles();\r\n\r\n        // Check if the directory is not empty\r\n        if (fileList == null) {\r\n            System.out.println(\"The directory is empty.\");\r\n            return;\r\n        }\r\n\r\n        // Loop through the files and directories and print their names\r\n        for (File file : fileList) {\r\n            // Print only files, not directories\r\n            if (file.isFile() && this.supportedFileTypes.contains(Util.getFileExtension(file))) {\r\n                System.out.println(file.getName());\r\n            }\r\n        }\r\n\r\n        System.out.println(\"Choose a file: \");\r\n        String fileName = this.scanner.nextLine();\r\n        Path filePath = this.dirPath.resolve(fileName);\r\n\r\n        if (Files.exists(filePath)) {\r\n            try {\r\n                Desktop.getDesktop().open(filePath.toFile());\r\n                int fileLen = videoLengths.get(fileName);\r\n                if (fileLen == 0) {\r\n                    System.out.println(fileName + \"is now playing for unknown amount of time.\");\r\n                }\r\n                else {\r\n                    System.out.println(fileName + \"is now playing for \" + fileLen + \" seconds.\");\r\n                }\r\n            } catch (IOException e) {\r\n                System.err.println(\"Failed to play the file: \" + e.getMessage());\r\n            }\r\n        } else {\r\n            System.out.println(\"File not found: \" + fileName);\r\n        }\r\n    }\r\n\r\n    private void playAll() {\r\n        File directory = new File(this.dirPath.toString());\r\n\r\n        // Get the list of all files and directories in the specified directory\r\n        File[] fileList = directory.listFiles();\r\n\r\n        // Check if the directory is not empty\r\n        if (fileList == null) {\r\n            System.out.println(\"The directory is empty.\");\r\n            return;\r\n        }\r\n\r\n        // Loop through the files and directories and print their names\r\n        for (File file : fileList) {\r\n            String fileName = file.getName();\r\n            // Print only files, not directories\r\n            if (file.isFile()) {\r\n                try {\r\n                    Desktop.getDesktop().open(file);\r\n                    int fileLen = videoLengths.get(fileName);\r\n                    if (fileLen == 0) {\r\n                        System.out.println(fileName + \"is now playing for unknown amount of time.\");\r\n                    }\r\n                    else {\r\n                        System.out.println(fileName + \"is now playing for \" + fileLen + \" seconds.\");\r\n                    }\r\n                } catch (IOException e) {\r\n                    System.err.println(\"Failed to play the file: \" + e.getMessage());\r\n                }\r\n            }\r\n        }\r\n    }\r\n\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/phone/src/Media.java b/phone/src/Media.java
+--- a/phone/src/Media.java	
++++ b/phone/src/Media.java	
+@@ -11,7 +11,7 @@
+ import java.nio.file.Paths;
+ import java.io.IOException;
+ 
+-@SuppressWarnings("unused")
++
+ public class Media extends Application {
+     private final Path dirPath;
+     private final HashSet<String> supportedFileTypes;
+@@ -23,13 +23,7 @@
+         this.supportedFileTypes.add("mp3");
+         this.supportedFileTypes.add("mp4");
+         this.videoLengths = new HashMap<>();
+-
+-        if (directory.mkdir()) {
+-            System.out.println("Directory created successfully!");
+-        }
+-        else {
+-            System.out.println("Failed to create the directory.");
+-        }
++        directory.mkdir();
+         dirPath = Paths.get(dirName);
+     }
+ 
+@@ -82,8 +76,7 @@
+         try {
+             Files.copy(filePath, targetFile);
+             this.videoLengths.put(filePath.getFileName().toString(), fileLen);
+-        }
+-        catch (IOException e) {
++        } catch (IOException e) {
+             System.err.println("Failed to copy the file: " + e.getMessage());
+         }
+     }
+@@ -128,8 +121,7 @@
+                 int fileLen = videoLengths.get(fileName);
+                 if (fileLen == 0) {
+                     System.out.println(fileName + "is now playing for unknown amount of time.");
+-                }
+-                else {
++                } else {
+                     System.out.println(fileName + "is now playing for " + fileLen + " seconds.");
+                 }
+             } catch (IOException e) {
+@@ -162,8 +154,7 @@
+                     int fileLen = videoLengths.get(fileName);
+                     if (fileLen == 0) {
+                         System.out.println(fileName + "is now playing for unknown amount of time.");
+-                    }
+-                    else {
++                    } else {
+                         System.out.println(fileName + "is now playing for " + fileLen + " seconds.");
+                     }
+                 } catch (IOException e) {
+Index: phone/src/SMS.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package phone.src;\r\n\r\nimport java.util.ArrayList;\r\nimport java.util.HashMap;\r\nimport java.util.Scanner;\r\n\r\npublic class SMS extends Application {\r\n    private final Scanner scanner = super.scanner;\r\n    private final HashMap<String, ArrayList<String>> messages = new HashMap<String, ArrayList<String>>();\r\n    private final Phonebook phonebook;\r\n    private final ArrayList<Contact> contacts;\r\n\r\n    public SMS(Phonebook phonebook) {\r\n        this.phonebook = phonebook;\r\n        contacts = phonebook.getContacts();\r\n    }\r\n\r\n    @Override\r\n    protected boolean decodeUserInput(int input) throws Exception {\r\n        switch (input) {\r\n            case 1:\r\n                this.addMessage();\r\n                break;\r\n            case 2:\r\n                this.removeMessage();\r\n                break;\r\n            case 3:\r\n                this.printContactMessage();\r\n                break;\r\n            case 4:\r\n                this.searchMessage();\r\n                break;\r\n            case 5:\r\n                this.printAllMessages();\r\n                break;\r\n            case 6:\r\n                return true;\r\n            default:\r\n                throw new Exception(\"Invalid Option\");\r\n        }\r\n        return false;\r\n    }\r\n\r\n    @Override\r\n    protected void printOptions() {\r\n        System.out.println(\"SMS:\");\r\n        System.out.println(\"1: Add message\");\r\n        System.out.println(\"2: Delete message\");\r\n        System.out.println(\"3: Print contact messages\");\r\n        System.out.println(\"4: Search message\");\r\n        System.out.println(\"5: Print all messages\");\r\n        System.out.println(\"6: Exit\");\r\n    }\r\n\r\n    @Override\r\n    protected void printAllData() {\r\n\r\n    }\r\n\r\n    private void addMessage() {\r\n        System.out.println(\"Enter contact name:\");\r\n        String name = scanner.nextLine();\r\n\r\n        Contact contact = phonebook.searchContact(name);\r\n        if (contact == null) {\r\n            System.out.println(\"Contact not found. Canceling the message...\");\r\n            System.out.println(\"Error adding contact\");\r\n            return;\r\n        }\r\n\r\n        System.out.println(\"Enter correspondence message:\");\r\n        String message = scanner.nextLine();\r\n\r\n        ArrayList<String> messageList;\r\n        boolean isFirstMessage;\r\n\r\n        if (messages.containsKey(name)) {\r\n            messageList = messages.get(name);\r\n            isFirstMessage = false;\r\n        } else {\r\n            messageList = new ArrayList<>();\r\n            isFirstMessage = true;\r\n        }\r\n\r\n        messageList.add(message);\r\n        messages.put(name, messageList);\r\n\r\n        if (isFirstMessage) {\r\n            System.out.println(\"New chat opened with \" + contact.getName() + \". Message: \" + message);\r\n        } else {\r\n            System.out.println(\"Message added to existing chat with \" + contact.getName() + \": \" + message);\r\n        }\r\n    }\r\n\r\n    private void removeMessage() {\r\n        System.out.println(\"Enter contact name:\");\r\n        String name = scanner.nextLine();\r\n\r\n        Contact contact = phonebook.searchContact(name);\r\n        if (contact == null) {\r\n            System.out.println(\"Contact not found. Canceling the removal...\");\r\n            System.out.println(\"Error removing messages\");\r\n            return;\r\n        }\r\n\r\n        if (!messages.containsKey(name)) {\r\n            System.out.println(\"No messages found for this contact.\");\r\n            return;\r\n        }\r\n\r\n        messages.remove(name);\r\n        System.out.println(\"All messages removed for contact \" + contact.getName());\r\n    }\r\n\r\n    private void printContactMessage() {\r\n        System.out.println(\"Enter contact name:\");\r\n        String name = scanner.nextLine();\r\n\r\n        Contact contact = phonebook.searchContact(name);\r\n\r\n        if (!messages.containsKey(name)) {\r\n            System.out.println(\"No messages found for contact \" + contact.getName());\r\n            return;\r\n        }\r\n\r\n        ArrayList<String> messageList = messages.get(name);\r\n        System.out.println(\"Correspondence with \" + contact.getName() + \":\");\r\n        for (String message : messageList) {\r\n            System.out.println(message);\r\n        }\r\n    }\r\n\r\n    private void searchMessage() {\r\n        System.out.println(\"Enter message to search:\");\r\n        String message = scanner.nextLine();\r\n        for (Contact contact : contacts) {\r\n            if (messages.get(contact.getName()) != null && messages.get(contact.getName()).contains(message)) {\r\n                System.out.println(contact.getName());\r\n            }\r\n        }\r\n    }\r\n\r\n    private void printAllMessages() {\r\n        for (Contact contact : contacts) {\r\n            if (messages.containsKey(contact.getName()))\r\n                System.out.println(contact.getName() + \":\" + messages.get(contact.getName()));\r\n            else\r\n                System.out.println(contact.getName() + \":[]\");\r\n        }\r\n    }\r\n\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/phone/src/SMS.java b/phone/src/SMS.java
+--- a/phone/src/SMS.java	
++++ b/phone/src/SMS.java	
+@@ -92,7 +92,7 @@
+         }
+     }
+ 
+-    private void removeMessage() {
++    public void removeMessage() {
+         System.out.println("Enter contact name:");
+         String name = scanner.nextLine();
+ 
+Index: phone/.idea/modules.xml
+===================================================================
+diff --git a/phone/.idea/modules.xml b/phone/.idea/modules.xml
+deleted file mode 100644
+--- a/phone/.idea/modules.xml	
++++ /dev/null	
+@@ -1,8 +0,0 @@
+-<?xml version="1.0" encoding="UTF-8"?>
+-<project version="4">
+-  <component name="ProjectModuleManager">
+-    <modules>
+-      <module fileurl="file://$PROJECT_DIR$/Phone.iml" filepath="$PROJECT_DIR$/Phone.iml" />
+-    </modules>
+-  </component>
+-</project>
+\ No newline at end of file
+Index: phone/.idea/inspectionProfiles/Project_Default.xml
+===================================================================
+diff --git a/phone/.idea/inspectionProfiles/Project_Default.xml b/phone/.idea/inspectionProfiles/Project_Default.xml
+deleted file mode 100644
+--- a/phone/.idea/inspectionProfiles/Project_Default.xml	
++++ /dev/null	
+@@ -1,14 +0,0 @@
+-<component name="InspectionProjectProfileManager">
+-  <profile version="1.0">
+-    <option name="myName" value="Project Default" />
+-    <inspection_tool class="PyPep8NamingInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true">
+-      <option name="ignoredErrors">
+-        <list>
+-          <option value="N803" />
+-          <option value="N806" />
+-          <option value="N802" />
+-        </list>
+-      </option>
+-    </inspection_tool>
+-  </profile>
+-</component>
+\ No newline at end of file
+Index: out/production/se-biu/.project
+===================================================================
+diff --git a/out/production/se-biu/.project b/out/production/se-biu/.project
+deleted file mode 100644
+--- a/out/production/se-biu/.project	
++++ /dev/null	
+@@ -1,17 +0,0 @@
+-<?xml version="1.0" encoding="UTF-8"?>
+-<projectDescription>
+-	<name>se-biu</name>
+-	<comment></comment>
+-	<projects>
+-	</projects>
+-	<buildSpec>
+-		<buildCommand>
+-			<name>org.eclipse.jdt.core.javabuilder</name>
+-			<arguments>
+-			</arguments>
+-		</buildCommand>
+-	</buildSpec>
+-	<natures>
+-		<nature>org.eclipse.jdt.core.javanature</nature>
+-	</natures>
+-</projectDescription>
+Index: out/production/se-biu/phone/.idea/.gitignore
+===================================================================
+diff --git a/out/production/se-biu/phone/.idea/.gitignore b/out/production/se-biu/phone/.idea/.gitignore
+deleted file mode 100644
+--- a/out/production/se-biu/phone/.idea/.gitignore	
++++ /dev/null	
+@@ -1,8 +0,0 @@
+-# Default ignored files
+-/shelf/
+-/workspace.xml
+-# Editor-based HTTP Client requests
+-/httpRequests/
+-# Datasource local storage ignored files
+-/dataSources/
+-/dataSources.local.xml
+Index: .project
+===================================================================
+diff --git a/.project b/.project
+deleted file mode 100644
+--- a/.project	
++++ /dev/null	
+@@ -1,17 +0,0 @@
+-<?xml version="1.0" encoding="UTF-8"?>
+-<projectDescription>
+-	<name>se-biu</name>
+-	<comment></comment>
+-	<projects>
+-	</projects>
+-	<buildSpec>
+-		<buildCommand>
+-			<name>org.eclipse.jdt.core.javabuilder</name>
+-			<arguments>
+-			</arguments>
+-		</buildCommand>
+-	</buildSpec>
+-	<natures>
+-		<nature>org.eclipse.jdt.core.javanature</nature>
+-	</natures>
+-</projectDescription>
+Index: out/production/se-biu/phone/.idea/vcs.xml
+===================================================================
+diff --git a/out/production/se-biu/phone/.idea/vcs.xml b/out/production/se-biu/phone/.idea/vcs.xml
+deleted file mode 100644
+--- a/out/production/se-biu/phone/.idea/vcs.xml	
++++ /dev/null	
+@@ -1,6 +0,0 @@
+-<?xml version="1.0" encoding="UTF-8"?>
+-<project version="4">
+-  <component name="VcsDirectoryMappings">
+-    <mapping directory="$PROJECT_DIR$/.." vcs="Git" />
+-  </component>
+-</project>
+\ No newline at end of file
+Index: out/production/se-biu/.classpath
+===================================================================
+diff --git a/out/production/se-biu/.classpath b/out/production/se-biu/.classpath
+deleted file mode 100644
+--- a/out/production/se-biu/.classpath	
++++ /dev/null	
+@@ -1,6 +0,0 @@
+-<?xml version="1.0" encoding="UTF-8"?>
+-<classpath>
+-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+-	<classpathentry kind="src" path=""/>
+-	<classpathentry kind="output" path=""/>
+-</classpath>
+Index: phone/.idea/vcs.xml
+===================================================================
+diff --git a/phone/.idea/vcs.xml b/phone/.idea/vcs.xml
+deleted file mode 100644
+--- a/phone/.idea/vcs.xml	
++++ /dev/null	
+@@ -1,6 +0,0 @@
+-<?xml version="1.0" encoding="UTF-8"?>
+-<project version="4">
+-  <component name="VcsDirectoryMappings">
+-    <mapping directory="$PROJECT_DIR$/.." vcs="Git" />
+-  </component>
+-</project>
+\ No newline at end of file
+Index: out/production/se-biu/phone/.idea/inspectionProfiles/Project_Default.xml
+===================================================================
+diff --git a/out/production/se-biu/phone/.idea/inspectionProfiles/Project_Default.xml b/out/production/se-biu/phone/.idea/inspectionProfiles/Project_Default.xml
+deleted file mode 100644
+--- a/out/production/se-biu/phone/.idea/inspectionProfiles/Project_Default.xml	
++++ /dev/null	
+@@ -1,14 +0,0 @@
+-<component name="InspectionProjectProfileManager">
+-  <profile version="1.0">
+-    <option name="myName" value="Project Default" />
+-    <inspection_tool class="PyPep8NamingInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true">
+-      <option name="ignoredErrors">
+-        <list>
+-          <option value="N803" />
+-          <option value="N806" />
+-          <option value="N802" />
+-        </list>
+-      </option>
+-    </inspection_tool>
+-  </profile>
+-</component>
+\ No newline at end of file
+Index: out/production/se-biu/phone/.idea/misc.xml
+===================================================================
+diff --git a/out/production/se-biu/phone/.idea/misc.xml b/out/production/se-biu/phone/.idea/misc.xml
+deleted file mode 100644
+--- a/out/production/se-biu/phone/.idea/misc.xml	
++++ /dev/null	
+@@ -1,6 +0,0 @@
+-<?xml version="1.0" encoding="UTF-8"?>
+-<project version="4">
+-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
+-    <output url="file://$PROJECT_DIR$/out" />
+-  </component>
+-</project>
+\ No newline at end of file
+Index: .classpath
+===================================================================
+diff --git a/.classpath b/.classpath
+deleted file mode 100644
+--- a/.classpath	
++++ /dev/null	
+@@ -1,6 +0,0 @@
+-<?xml version="1.0" encoding="UTF-8"?>
+-<classpath>
+-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+-	<classpathentry kind="src" path=""/>
+-	<classpathentry kind="output" path=""/>
+-</classpath>
+Index: phone/.idea/misc.xml
+===================================================================
+diff --git a/phone/.idea/misc.xml b/phone/.idea/misc.xml
+deleted file mode 100644
+--- a/phone/.idea/misc.xml	
++++ /dev/null	
+@@ -1,6 +0,0 @@
+-<?xml version="1.0" encoding="UTF-8"?>
+-<project version="4">
+-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
+-    <output url="file://$PROJECT_DIR$/out" />
+-  </component>
+-</project>
+\ No newline at end of file
+Index: phone/.idea/.gitignore
+===================================================================
+diff --git a/phone/.idea/.gitignore b/phone/.idea/.gitignore
+deleted file mode 100644
+--- a/phone/.idea/.gitignore	
++++ /dev/null	
+@@ -1,8 +0,0 @@
+-# Default ignored files
+-/shelf/
+-/workspace.xml
+-# Editor-based HTTP Client requests
+-/httpRequests/
+-# Datasource local storage ignored files
+-/dataSources/
+-/dataSources.local.xml
+Index: out/production/se-biu/phone/.idea/modules.xml
+===================================================================
+diff --git a/out/production/se-biu/phone/.idea/modules.xml b/out/production/se-biu/phone/.idea/modules.xml
+deleted file mode 100644
+--- a/out/production/se-biu/phone/.idea/modules.xml	
++++ /dev/null	
+@@ -1,8 +0,0 @@
+-<?xml version="1.0" encoding="UTF-8"?>
+-<project version="4">
+-  <component name="ProjectModuleManager">
+-    <modules>
+-      <module fileurl="file://$PROJECT_DIR$/Phone.iml" filepath="$PROJECT_DIR$/Phone.iml" />
+-    </modules>
+-  </component>
+-</project>
+\ No newline at end of file
+Index: out/production/se-biu/.idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"AutoImportSettings\">\r\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\r\n  </component>\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"ef8ef85d-4347-4e7d-814b-12faee5299f3\" name=\"Changes\" comment=\"\">\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/workspace.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/phone/src/Application.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/phone/src/Application.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/phone/src/Main.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/phone/src/Main.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/phone/src/Phonebook.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/phone/src/Phonebook.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/phone/src/SMS.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/phone/src/SMS.java\" afterDir=\"false\" />\r\n    </list>\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"FileTemplateManagerImpl\">\r\n    <option name=\"RECENT_TEMPLATES\">\r\n      <list>\r\n        <option value=\"Class\" />\r\n      </list>\r\n    </option>\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"GitHubPullRequestSearchHistory\">{\r\n  &quot;lastFilter&quot;: {\r\n    &quot;state&quot;: &quot;OPEN&quot;,\r\n    &quot;assignee&quot;: &quot;lycaon7&quot;\r\n  }\r\n}</component>\r\n  <component name=\"GithubPullRequestsUISettings\">{\r\n  &quot;selectedUrlAndAccountId&quot;: {\r\n    &quot;url&quot;: &quot;https://github.com/illaykaye/se-biu.git&quot;,\r\n    &quot;accountId&quot;: &quot;8b5f05ca-898a-46de-ab4d-c9ce47e40c0a&quot;\r\n  }\r\n}</component>\r\n  <component name=\"HighlightingSettingsPerFile\">\r\n    <setting file=\"jar://$PROJECT_DIR$/../../../../../Program Files/Eclipse Adoptium/jdk-11.0.19.7-hotspot/lib/src.zip!/java.base/java/util/ArrayList.java\" root0=\"SKIP_INSPECTION\" />\r\n  </component>\r\n  <component name=\"ProjectColorInfo\">{\r\n  &quot;customColor&quot;: &quot;&quot;,\r\n  &quot;associatedIndex&quot;: 2\r\n}</component>\r\n  <component name=\"ProjectId\" id=\"2hUsuOJgG5SmJdyOvHoeWH40Xti\" />\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\">{\r\n  &quot;keyToString&quot;: {\r\n    &quot;Application.Main.executor&quot;: &quot;Run&quot;,\r\n    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,\r\n    &quot;git-widget-placeholder&quot;: &quot;SMS&quot;,\r\n    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,\r\n    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,\r\n    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,\r\n    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,\r\n    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,\r\n    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,\r\n    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,\r\n    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;\r\n  }\r\n}</component>\r\n  <component name=\"RunManager\">\r\n    <configuration name=\"Main\" type=\"Application\" factoryName=\"Application\">\r\n      <option name=\"MAIN_CLASS_NAME\" value=\"phone.src.Main\" />\r\n      <module name=\"se-biu\" />\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n  </component>\r\n  <component name=\"SharedIndexes\">\r\n    <attachedChunks>\r\n      <set>\r\n        <option value=\"bundled-jdk-9f38398b9061-39b83d9b5494-intellij.indexing.shared.core-IU-241.18034.62\" />\r\n        <option value=\"bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-IU-241.18034.62\" />\r\n      </set>\r\n    </attachedChunks>\r\n  </component>\r\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"ef8ef85d-4347-4e7d-814b-12faee5299f3\" name=\"Changes\" comment=\"\" />\r\n      <created>1717660213292</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1717660213292</updated>\r\n      <workItem from=\"1717660214759\" duration=\"39000\" />\r\n      <workItem from=\"1717679049046\" duration=\"13000\" />\r\n      <workItem from=\"1717927955356\" duration=\"120000\" />\r\n      <workItem from=\"1718536267428\" duration=\"1292000\" />\r\n      <workItem from=\"1718537669095\" duration=\"51000\" />\r\n      <workItem from=\"1718537739128\" duration=\"1380000\" />\r\n      <workItem from=\"1718551205409\" duration=\"106000\" />\r\n      <workItem from=\"1718713614837\" duration=\"21000\" />\r\n      <workItem from=\"1718887468561\" duration=\"1252000\" />\r\n      <workItem from=\"1718888758614\" duration=\"634000\" />\r\n      <workItem from=\"1718898032872\" duration=\"4336000\" />\r\n      <workItem from=\"1719128313873\" duration=\"784000\" />\r\n      <workItem from=\"1719136353632\" duration=\"629000\" />\r\n    </task>\r\n    <servers />\r\n  </component>\r\n  <component name=\"TypeScriptGeneratedFilesManager\">\r\n    <option name=\"version\" value=\"3\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/out/production/se-biu/.idea/workspace.xml b/out/production/se-biu/.idea/workspace.xml
+--- a/out/production/se-biu/.idea/workspace.xml	
++++ b/out/production/se-biu/.idea/workspace.xml	
+@@ -4,11 +4,20 @@
+     <option name="autoReloadType" value="SELECTIVE" />
+   </component>
+   <component name="ChangeListManager">
+-    <list default="true" id="ef8ef85d-4347-4e7d-814b-12faee5299f3" name="Changes" comment="">
+-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/phone/src/Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/phone/src/Application.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/phone/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/phone/src/Main.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/phone/src/Phonebook.java" beforeDir="false" afterPath="$PROJECT_DIR$/phone/src/Phonebook.java" afterDir="false" />
++    <list default="true" id="ef8ef85d-4347-4e7d-814b-12faee5299f3" name="Changes" comment="Add event fixed">
++      <change beforePath="$PROJECT_DIR$/.classpath" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.project" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/out/production/se-biu/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/se-biu/.idea/misc.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/out/production/se-biu/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/se-biu/.idea/workspace.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/out/production/se-biu/phone/src/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/se-biu/phone/src/.gitignore" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/phone/.idea/.gitignore" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/phone/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/phone/.idea/misc.xml" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/phone/.idea/modules.xml" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/phone/.idea/vcs.xml" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/phone/src/Media.java" beforeDir="false" afterPath="$PROJECT_DIR$/phone/src/Media.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/phone/src/Phone.java" beforeDir="false" afterPath="$PROJECT_DIR$/phone/src/Phone.java" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/phone/src/SMS.java" beforeDir="false" afterPath="$PROJECT_DIR$/phone/src/SMS.java" afterDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+@@ -24,6 +33,37 @@
+     </option>
+   </component>
+   <component name="Git.Settings">
++    <excluded-from-favorite>
++      <branch-storage>
++        <map>
++          <entry type="LOCAL">
++            <value>
++              <list>
++                <branch-info repo="$PROJECT_DIR$" source="master" />
++              </list>
++            </value>
++          </entry>
++        </map>
++      </branch-storage>
++    </excluded-from-favorite>
++    <favorite-branches>
++      <branch-storage>
++        <map>
++          <entry type="LOCAL">
++            <value>
++              <list>
++                <branch-info repo="$PROJECT_DIR$" source="calendar" />
++              </list>
++            </value>
++          </entry>
++        </map>
++      </branch-storage>
++    </favorite-branches>
++    <option name="RECENT_BRANCH_BY_REPOSITORY">
++      <map>
++        <entry key="$PROJECT_DIR$" value="master" />
++      </map>
++    </option>
+     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+   </component>
+   <component name="GitHubPullRequestSearchHistory">{
+@@ -38,9 +78,6 @@
+     &quot;accountId&quot;: &quot;8b5f05ca-898a-46de-ab4d-c9ce47e40c0a&quot;
+   }
+ }</component>
+-  <component name="HighlightingSettingsPerFile">
+-    <setting file="jar://$PROJECT_DIR$/../../../../../Program Files/Eclipse Adoptium/jdk-11.0.19.7-hotspot/lib/src.zip!/java.base/java/util/ArrayList.java" root0="SKIP_INSPECTION" />
+-  </component>
+   <component name="ProjectColorInfo">{
+   &quot;customColor&quot;: &quot;&quot;,
+   &quot;associatedIndex&quot;: 2
+@@ -50,23 +87,23 @@
+     <option name="hideEmptyMiddlePackages" value="true" />
+     <option name="showLibraryContents" value="true" />
+   </component>
+-  <component name="PropertiesComponent">{
+-  &quot;keyToString&quot;: {
+-    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
+-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+-    &quot;git-widget-placeholder&quot;: &quot;SMS&quot;,
+-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
++  <component name="PropertiesComponent"><![CDATA[{
++  "keyToString": {
++    "RunOnceActivity.ShowReadmeOnStart": "true",
++    "git-widget-placeholder": "master",
++    "ignore.virus.scanning.warn.message": "true",
++    "kotlin-language-version-configured": "true",
++    "node.js.detected.package.eslint": "true",
++    "node.js.detected.package.tslint": "true",
++    "node.js.selected.package.eslint": "(autodetect)",
++    "node.js.selected.package.tslint": "(autodetect)",
++    "nodejs_package_manager_path": "npm",
++    "settings.editor.selected.configurable": "preferences.general",
++    "vue.rearranger.settings.migration": "true"
+   }
+-}</component>
++}]]></component>
+   <component name="RunManager">
+-    <configuration name="Main" type="Application" factoryName="Application">
++    <configuration name="main" type="Application" factoryName="Application">
+       <option name="MAIN_CLASS_NAME" value="phone.src.Main" />
+       <module name="se-biu" />
+       <method v="2">
+@@ -96,17 +133,53 @@
+       <workItem from="1718536267428" duration="1292000" />
+       <workItem from="1718537669095" duration="51000" />
+       <workItem from="1718537739128" duration="1380000" />
+-      <workItem from="1718551205409" duration="106000" />
+-      <workItem from="1718713614837" duration="21000" />
+-      <workItem from="1718887468561" duration="1252000" />
+-      <workItem from="1718888758614" duration="634000" />
+-      <workItem from="1718898032872" duration="4336000" />
+-      <workItem from="1719128313873" duration="784000" />
+-      <workItem from="1719136353632" duration="629000" />
++      <workItem from="1719501259037" duration="57000" />
+     </task>
++    <task id="LOCAL-00001" summary="calendar">
++      <option name="closed" value="true" />
++      <created>1719423263685</created>
++      <option name="number" value="00001" />
++      <option name="presentableId" value="LOCAL-00001" />
++      <option name="project" value="LOCAL" />
++      <updated>1719423263685</updated>
++    </task>
++    <task id="LOCAL-00002" summary="overlaps calendar">
++      <option name="closed" value="true" />
++      <created>1719496971467</created>
++      <option name="number" value="00002" />
++      <option name="presentableId" value="LOCAL-00002" />
++      <option name="project" value="LOCAL" />
++      <updated>1719496971467</updated>
++    </task>
++    <task id="LOCAL-00003" summary="Add event fixed">
++      <option name="closed" value="true" />
++      <created>1719498406883</created>
++      <option name="number" value="00003" />
++      <option name="presentableId" value="LOCAL-00003" />
++      <option name="project" value="LOCAL" />
++      <updated>1719498406883</updated>
++    </task>
++    <option name="localTasksCounter" value="4" />
+     <servers />
+   </component>
+   <component name="TypeScriptGeneratedFilesManager">
+     <option name="version" value="3" />
+   </component>
++  <component name="Vcs.Log.Tabs.Properties">
++    <option name="TAB_STATES">
++      <map>
++        <entry key="MAIN">
++          <value>
++            <State />
++          </value>
++        </entry>
++      </map>
++    </option>
++  </component>
++  <component name="VcsManagerConfiguration">
++    <MESSAGE value="calendar" />
++    <MESSAGE value="overlaps calendar" />
++    <MESSAGE value="Add event fixed" />
++    <option name="LAST_COMMIT_MESSAGE" value="Add event fixed" />
++  </component>
+ </project>
+\ No newline at end of file
+Index: .idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"ProjectRootManager\" version=\"2\" languageLevel=\"JDK_22\" default=\"true\" project-jdk-name=\"22\" project-jdk-type=\"JavaSDK\">\r\n    <output url=\"file://$PROJECT_DIR$/out\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/misc.xml b/.idea/misc.xml
+--- a/.idea/misc.xml	
++++ b/.idea/misc.xml	
+@@ -1,6 +1,6 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
+-  <component name="ProjectRootManager" version="2" languageLevel="JDK_22" default="true" project-jdk-name="22" project-jdk-type="JavaSDK">
++  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="22" project-jdk-type="JavaSDK">
+     <output url="file://$PROJECT_DIR$/out" />
+   </component>
+ </project>
+\ No newline at end of file
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"AutoImportSettings\">\r\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\r\n  </component>\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"ef8ef85d-4347-4e7d-814b-12faee5299f3\" name=\"Changes\" comment=\"Add event fixed\">\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/workspace.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/phone/src/Calendar.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/phone/src/Calendar.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/phone/src/Event.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/phone/src/Event.java\" afterDir=\"false\" />\r\n    </list>\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"FileTemplateManagerImpl\">\r\n    <option name=\"RECENT_TEMPLATES\">\r\n      <list>\r\n        <option value=\"Class\" />\r\n      </list>\r\n    </option>\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <excluded-from-favorite>\r\n      <branch-storage>\r\n        <map>\r\n          <entry type=\"LOCAL\">\r\n            <value>\r\n              <list>\r\n                <branch-info repo=\"$PROJECT_DIR$\" source=\"master\" />\r\n              </list>\r\n            </value>\r\n          </entry>\r\n        </map>\r\n      </branch-storage>\r\n    </excluded-from-favorite>\r\n    <favorite-branches>\r\n      <branch-storage>\r\n        <map>\r\n          <entry type=\"LOCAL\">\r\n            <value>\r\n              <list>\r\n                <branch-info repo=\"$PROJECT_DIR$\" source=\"calendar\" />\r\n              </list>\r\n            </value>\r\n          </entry>\r\n        </map>\r\n      </branch-storage>\r\n    </favorite-branches>\r\n    <option name=\"RECENT_BRANCH_BY_REPOSITORY\">\r\n      <map>\r\n        <entry key=\"$PROJECT_DIR$\" value=\"master\" />\r\n      </map>\r\n    </option>\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"GitHubPullRequestSearchHistory\">{\r\n  &quot;lastFilter&quot;: {\r\n    &quot;state&quot;: &quot;OPEN&quot;,\r\n    &quot;assignee&quot;: &quot;lycaon7&quot;\r\n  }\r\n}</component>\r\n  <component name=\"GithubPullRequestsUISettings\">{\r\n  &quot;selectedUrlAndAccountId&quot;: {\r\n    &quot;url&quot;: &quot;https://github.com/illaykaye/se-biu.git&quot;,\r\n    &quot;accountId&quot;: &quot;8b5f05ca-898a-46de-ab4d-c9ce47e40c0a&quot;\r\n  }\r\n}</component>\r\n  <component name=\"ProjectColorInfo\">{\r\n  &quot;customColor&quot;: &quot;&quot;,\r\n  &quot;associatedIndex&quot;: 2\r\n}</component>\r\n  <component name=\"ProjectId\" id=\"2hUsuOJgG5SmJdyOvHoeWH40Xti\" />\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\">{\r\n  &quot;keyToString&quot;: {\r\n    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,\r\n    &quot;git-widget-placeholder&quot;: &quot;calendar&quot;,\r\n    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,\r\n    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,\r\n    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,\r\n    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,\r\n    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,\r\n    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,\r\n    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,\r\n    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.general&quot;,\r\n    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;\r\n  }\r\n}</component>\r\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"ef8ef85d-4347-4e7d-814b-12faee5299f3\" name=\"Changes\" comment=\"\" />\r\n      <created>1717660213292</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1717660213292</updated>\r\n      <workItem from=\"1717660214759\" duration=\"39000\" />\r\n      <workItem from=\"1717679049046\" duration=\"13000\" />\r\n      <workItem from=\"1717927955356\" duration=\"120000\" />\r\n      <workItem from=\"1718536267428\" duration=\"1292000\" />\r\n      <workItem from=\"1718537669095\" duration=\"51000\" />\r\n      <workItem from=\"1718537739128\" duration=\"1380000\" />\r\n    </task>\r\n    <task id=\"LOCAL-00001\" summary=\"calendar\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1719423263685</created>\r\n      <option name=\"number\" value=\"00001\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00001\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1719423263685</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00002\" summary=\"overlaps calendar\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1719496971467</created>\r\n      <option name=\"number\" value=\"00002\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00002\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1719496971467</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00003\" summary=\"Add event fixed\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1719498406883</created>\r\n      <option name=\"number\" value=\"00003\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00003\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1719498406883</updated>\r\n    </task>\r\n    <option name=\"localTasksCounter\" value=\"4\" />\r\n    <servers />\r\n  </component>\r\n  <component name=\"TypeScriptGeneratedFilesManager\">\r\n    <option name=\"version\" value=\"3\" />\r\n  </component>\r\n  <component name=\"Vcs.Log.Tabs.Properties\">\r\n    <option name=\"TAB_STATES\">\r\n      <map>\r\n        <entry key=\"MAIN\">\r\n          <value>\r\n            <State />\r\n          </value>\r\n        </entry>\r\n      </map>\r\n    </option>\r\n  </component>\r\n  <component name=\"VcsManagerConfiguration\">\r\n    <MESSAGE value=\"calendar\" />\r\n    <MESSAGE value=\"overlaps calendar\" />\r\n    <MESSAGE value=\"Add event fixed\" />\r\n    <option name=\"LAST_COMMIT_MESSAGE\" value=\"Add event fixed\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	
++++ b/.idea/workspace.xml	
+@@ -5,9 +5,20 @@
+   </component>
+   <component name="ChangeListManager">
+     <list default="true" id="ef8ef85d-4347-4e7d-814b-12faee5299f3" name="Changes" comment="Add event fixed">
+-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/phone/src/Calendar.java" beforeDir="false" afterPath="$PROJECT_DIR$/phone/src/Calendar.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/phone/src/Event.java" beforeDir="false" afterPath="$PROJECT_DIR$/phone/src/Event.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.classpath" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.project" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/out/production/se-biu/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/se-biu/.idea/misc.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/out/production/se-biu/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/se-biu/.idea/workspace.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/out/production/se-biu/phone/src/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/se-biu/phone/src/.gitignore" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/phone/.idea/.gitignore" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/phone/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/phone/.idea/misc.xml" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/phone/.idea/modules.xml" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/phone/.idea/vcs.xml" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/phone/src/Media.java" beforeDir="false" afterPath="$PROJECT_DIR$/phone/src/Media.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/phone/src/Phone.java" beforeDir="false" afterPath="$PROJECT_DIR$/phone/src/Phone.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/phone/src/SMS.java" beforeDir="false" afterPath="$PROJECT_DIR$/phone/src/SMS.java" afterDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+@@ -76,21 +87,38 @@
+     <option name="hideEmptyMiddlePackages" value="true" />
+     <option name="showLibraryContents" value="true" />
+   </component>
+-  <component name="PropertiesComponent">{
+-  &quot;keyToString&quot;: {
+-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+-    &quot;git-widget-placeholder&quot;: &quot;calendar&quot;,
+-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.general&quot;,
+-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+-  }
+-}</component>
++  <component name="PropertiesComponent"><![CDATA[{
++  "keyToString": {
++    "RunOnceActivity.ShowReadmeOnStart": "true",
++    "git-widget-placeholder": "master",
++    "ignore.virus.scanning.warn.message": "true",
++    "kotlin-language-version-configured": "true",
++    "node.js.detected.package.eslint": "true",
++    "node.js.detected.package.tslint": "true",
++    "node.js.selected.package.eslint": "(autodetect)",
++    "node.js.selected.package.tslint": "(autodetect)",
++    "nodejs_package_manager_path": "npm",
++    "settings.editor.selected.configurable": "preferences.general",
++    "vue.rearranger.settings.migration": "true"
++  }
++}]]></component>
++  <component name="RunManager">
++    <configuration name="main" type="Application" factoryName="Application">
++      <option name="MAIN_CLASS_NAME" value="phone.src.Main" />
++      <module name="se-biu" />
++      <method v="2">
++        <option name="Make" enabled="true" />
++      </method>
++    </configuration>
++  </component>
++  <component name="SharedIndexes">
++    <attachedChunks>
++      <set>
++        <option value="bundled-jdk-9f38398b9061-39b83d9b5494-intellij.indexing.shared.core-IU-241.18034.62" />
++        <option value="bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-IU-241.18034.62" />
++      </set>
++    </attachedChunks>
++  </component>
+   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+   <component name="TaskManager">
+     <task active="true" id="Default" summary="Default task">
+@@ -105,6 +133,7 @@
+       <workItem from="1718536267428" duration="1292000" />
+       <workItem from="1718537669095" duration="51000" />
+       <workItem from="1718537739128" duration="1380000" />
++      <workItem from="1719501259037" duration="57000" />
+     </task>
+     <task id="LOCAL-00001" summary="calendar">
+       <option name="closed" value="true" />
+Index: out/production/se-biu/.idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"ProjectRootManager\" version=\"2\" languageLevel=\"JDK_11\" default=\"true\" project-jdk-name=\"11\" project-jdk-type=\"JavaSDK\">\r\n    <output url=\"file://$PROJECT_DIR$/out\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/out/production/se-biu/.idea/misc.xml b/out/production/se-biu/.idea/misc.xml
+--- a/out/production/se-biu/.idea/misc.xml	
++++ b/out/production/se-biu/.idea/misc.xml	
+@@ -1,6 +1,6 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
+-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
++  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="22" project-jdk-type="JavaSDK">
+     <output url="file://$PROJECT_DIR$/out" />
+   </component>
+ </project>
+\ No newline at end of file
+Index: out/production/se-biu/phone/src/.gitignore
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>/Application.class\r\n/Contact.class\r\n/Main.class\r\n/Phonebook.class\r\n/SMS.class\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/out/production/se-biu/phone/src/.gitignore b/out/production/se-biu/phone/src/.gitignore
+--- a/out/production/se-biu/phone/src/.gitignore	
++++ b/out/production/se-biu/phone/src/.gitignore	
+@@ -3,3 +3,7 @@
+ /Main.class
+ /Phonebook.class
+ /SMS.class
++/Media.class
++/Util.class
++/Phone.class
++/Calendar.class

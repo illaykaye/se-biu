@@ -11,7 +11,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.io.IOException;
 
-@SuppressWarnings("unused")
+
 public class Media extends Application {
     private final Path dirPath;
     private final HashSet<String> supportedFileTypes;
@@ -23,13 +23,7 @@ public class Media extends Application {
         this.supportedFileTypes.add("mp3");
         this.supportedFileTypes.add("mp4");
         this.videoLengths = new HashMap<>();
-
-        if (directory.mkdir()) {
-            System.out.println("Directory created successfully!");
-        }
-        else {
-            System.out.println("Failed to create the directory.");
-        }
+        directory.mkdir();
         dirPath = Paths.get(dirName);
     }
 
@@ -82,8 +76,7 @@ public class Media extends Application {
         try {
             Files.copy(filePath, targetFile);
             this.videoLengths.put(filePath.getFileName().toString(), fileLen);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             System.err.println("Failed to copy the file: " + e.getMessage());
         }
     }
@@ -128,8 +121,7 @@ public class Media extends Application {
                 int fileLen = videoLengths.get(fileName);
                 if (fileLen == 0) {
                     System.out.println(fileName + "is now playing for unknown amount of time.");
-                }
-                else {
+                } else {
                     System.out.println(fileName + "is now playing for " + fileLen + " seconds.");
                 }
             } catch (IOException e) {
@@ -162,8 +154,7 @@ public class Media extends Application {
                     int fileLen = videoLengths.get(fileName);
                     if (fileLen == 0) {
                         System.out.println(fileName + "is now playing for unknown amount of time.");
-                    }
-                    else {
+                    } else {
                         System.out.println(fileName + "is now playing for " + fileLen + " seconds.");
                     }
                 } catch (IOException e) {

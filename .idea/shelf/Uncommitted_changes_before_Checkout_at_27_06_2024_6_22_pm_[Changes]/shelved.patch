@@ -1,0 +1,134 @@
+Index: phone/src/Phone.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package phone.src;\r\n\r\nimport java.util.ArrayList;\r\nimport java.util.List;\r\nimport java.util.Scanner;\r\n\r\npublic class Phone {\r\n\tprivate final Scanner scanner = new Scanner(System.in);\r\n\tprivate final List<Application> apps;\r\n\r\n\tpublic Phone() {\r\n\t\tthis.apps = new ArrayList<>(4);\r\n\t\tthis.apps.add(new Phonebook());\r\n\t\tfor (int i = 1; i < 4; i++) {\r\n\t\t\tthis.apps.add(null);\r\n\t\t}\r\n\t}\r\n\r\n\tprivate void printOptions() {\r\n\t\tSystem.out.println(\"Phone apps:\");\r\n\t\tSystem.out.println(\"1: Phonebook\");\r\n\t\tSystem.out.println(\"2: SMS\");\r\n\t\tSystem.out.println(\"3: Calendar\");\r\n\t\tSystem.out.println(\"4: Media\");\r\n\t\tSystem.out.println(\"5: Exit\");\r\n\t}\r\n\r\n\tprivate boolean decodeUserInput(int input) throws Exception {\r\n\t\tswitch (input) {\r\n\t\tcase 1:\r\n\t\t\tthis.apps.get(0).runApp();\r\n\t\t\tbreak;\r\n\t\tcase 2:\r\n\t\t\tif (this.apps.get(1) == null) {\r\n\t\t\t\tthis.apps.set(1, new SMS((Phonebook) this.apps.get(0)));\r\n\t\t\t}\r\n\t\t\tthis.apps.get(1).runApp();\r\n\t\t\tbreak;\r\n\t\tcase 3:\r\n\t\t\tif (this.apps.get(2) == null) {\r\n\t\t\t\tthis.apps.set(2, new Calendar((Phonebook) this.apps.get(0)));\r\n\t\t\t}\r\n\t\t\tthis.apps.get(2).runApp();\r\n\t\t\tbreak;\r\n\t\tcase 4:\r\n\t\t\tif (this.apps.get(3) == null) {\r\n\t\t\t\tSystem.out.println(\"Choose directory name: \");\r\n\t\t\t\tString dirName = scanner.nextLine();\r\n\t\t\t\tthis.apps.set(3, new Media(dirName));\r\n\t\t\t}\r\n\t\t\tthis.apps.get(3).runApp();\r\n\t\t\tbreak;\r\n\t\tcase 5:\r\n\t\t\treturn true;\r\n\t\tdefault:\r\n\t\t\tthrow new Exception(\"Invalid Option\");\r\n\t\t}\r\n\t\treturn false;\r\n\t}\r\n\r\n\tpublic void run() {\r\n\t\tboolean exit = false;\r\n\t\twhile (!exit) {\r\n\t\t\tprintOptions();\r\n\t\t\tSystem.out.println(\"Choose an option: \");\r\n\t\t\ttry {\r\n\t\t\t\tint input = Integer.parseInt(scanner.nextLine());\r\n\t\t\t\texit = decodeUserInput(input);\r\n\t\t\t} catch (Exception e) {\r\n\t\t\t\tSystem.out.println(e.getMessage());\r\n\t\t\t}\r\n\t\t}\r\n\t}\r\n}\r\n
+===================================================================
+diff --git a/phone/src/Phone.java b/phone/src/Phone.java
+--- a/phone/src/Phone.java	
++++ b/phone/src/Phone.java	
+@@ -1,74 +1,61 @@
+ package phone.src;
+ 
+-import java.util.ArrayList;
+-import java.util.List;
+ import java.util.Scanner;
+ 
+ public class Phone {
+-	private final Scanner scanner = new Scanner(System.in);
+-	private final List<Application> apps;
++    private final Scanner scanner = new Scanner(System.in);
++
++    // Apps
++    public static final Phonebook phonebook = new Phonebook();
++    public static final SMS sms = new SMS(phonebook);
++    public static final Calendar calendar = new Calendar();
++    public static final Media media = new Media("Media");
+ 
+-	public Phone() {
+-		this.apps = new ArrayList<>(4);
+-		this.apps.add(new Phonebook());
+-		for (int i = 1; i < 4; i++) {
+-			this.apps.add(null);
+-		}
+-	}
++    public Phone() {
++    }
+ 
+-	private void printOptions() {
+-		System.out.println("Phone apps:");
+-		System.out.println("1: Phonebook");
+-		System.out.println("2: SMS");
+-		System.out.println("3: Calendar");
+-		System.out.println("4: Media");
+-		System.out.println("5: Exit");
+-	}
++    private void printOptions() {
++        System.out.println("Phone apps:");
++        System.out.println("1: Phonebook");
++        System.out.println("2: SMS");
++        System.out.println("3: Calendar");
++        System.out.println("4: Media");
++        System.out.println("5: Exit");
++    }
+ 
+-	private boolean decodeUserInput(int input) throws Exception {
+-		switch (input) {
+-		case 1:
+-			this.apps.get(0).runApp();
+-			break;
+-		case 2:
+-			if (this.apps.get(1) == null) {
+-				this.apps.set(1, new SMS((Phonebook) this.apps.get(0)));
+-			}
+-			this.apps.get(1).runApp();
+-			break;
+-		case 3:
+-			if (this.apps.get(2) == null) {
+-				this.apps.set(2, new Calendar((Phonebook) this.apps.get(0)));
+-			}
+-			this.apps.get(2).runApp();
+-			break;
+-		case 4:
+-			if (this.apps.get(3) == null) {
+-				System.out.println("Choose directory name: ");
+-				String dirName = scanner.nextLine();
+-				this.apps.set(3, new Media(dirName));
+-			}
+-			this.apps.get(3).runApp();
+-			break;
+-		case 5:
+-			return true;
+-		default:
+-			throw new Exception("Invalid Option");
+-		}
+-		return false;
+-	}
++    private boolean decodeUserInput(int input) throws Exception {
++        switch (input) {
++            case 1:
++                phonebook.runApp();
++                break;
++            case 2:
++                sms.runApp();
++                break;
++            case 3:
++                calendar.runApp();
++                break;
++            case 4:
++                media.runApp();
++                break;
++            case 5:
++                return true;
++            default:
++                throw new Exception("Invalid Option");
++        }
++        return false;
++    }
+ 
+-	public void run() {
+-		boolean exit = false;
+-		while (!exit) {
+-			printOptions();
+-			System.out.println("Choose an option: ");
+-			try {
+-				int input = Integer.parseInt(scanner.nextLine());
+-				exit = decodeUserInput(input);
+-			} catch (Exception e) {
+-				System.out.println(e.getMessage());
+-			}
+-		}
+-	}
++    public void run() {
++        boolean exit = false;
++        while (!exit) {
++            printOptions();
++            System.out.println("Choose an option: ");
++            try {
++                int input = Integer.parseInt(scanner.nextLine());
++                exit = decodeUserInput(input);
++            } catch (Exception e) {
++                System.out.println(e.getMessage());
++            }
++        }
++    }
+ }

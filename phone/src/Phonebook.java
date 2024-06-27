@@ -107,6 +107,7 @@ public class Phonebook extends Application {
         String name = scanner.nextLine();
         for (int i = 0; i < this.contacts.size(); ++i) {
             if (this.contacts.get(i).getName().equals(name)) {
+                Phone.
                 this.contacts.remove(i);
                 return;
             }

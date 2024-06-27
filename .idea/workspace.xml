@@ -5,9 +5,28 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ef8ef85d-4347-4e7d-814b-12faee5299f3" name="Changes" comment="Add event fixed">
+      <change beforePath="$PROJECT_DIR$/.classpath" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/phone/src/Calendar.java" beforeDir="false" afterPath="$PROJECT_DIR$/phone/src/Calendar.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/phone/src/Event.java" beforeDir="false" afterPath="$PROJECT_DIR$/phone/src/Event.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.project" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/se-biu/.classpath" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/se-biu/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/se-biu/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/se-biu/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/se-biu/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/se-biu/.project" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/se-biu/phone/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/se-biu/phone/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/se-biu/phone/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/se-biu/phone/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/se-biu/phone/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/se-biu/phone/src/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/se-biu/phone/src/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/phone/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/phone/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/phone/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/phone/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/phone/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/phone/src/Media.java" beforeDir="false" afterPath="$PROJECT_DIR$/phone/src/Media.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/phone/src/Phonebook.java" beforeDir="false" afterPath="$PROJECT_DIR$/phone/src/Phonebook.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/phone/src/SMS.java" beforeDir="false" afterPath="$PROJECT_DIR$/phone/src/SMS.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,7 +69,7 @@
     </favorite-branches>
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="master" />
+        <entry key="$PROJECT_DIR$" value="calendar" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -78,8 +97,9 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;Application.main.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;calendar&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
@@ -91,6 +111,23 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
+  <component name="RunManager">
+    <configuration name="main" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="phone.src.Main" />
+      <module name="se-biu" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9f38398b9061-39b83d9b5494-intellij.indexing.shared.core-IU-241.18034.62" />
+        <option value="bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-IU-241.18034.62" />
+      </set>
+    </attachedChunks>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -105,6 +142,8 @@
       <workItem from="1718536267428" duration="1292000" />
       <workItem from="1718537669095" duration="51000" />
       <workItem from="1718537739128" duration="1380000" />
+      <workItem from="1719501259037" duration="1331000" />
+      <workItem from="1719502616035" duration="3000" />
     </task>
     <task id="LOCAL-00001" summary="calendar">
       <option name="closed" value="true" />

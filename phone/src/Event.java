@@ -63,6 +63,12 @@ public class Event implements Comparable<Event> {
         return (this.getStartTime().equals(dateFormat.parse(date)));
     }
 
+    public int getDayOfTheMonth() {
+        java.util.Calendar cal = java.util.Calendar.getInstance();
+        cal.setTime(this.getStartTime());
+        return cal.get(java.util.Calendar.DAY_OF_MONTH);
+    }
+
     public boolean isDate(Date date) {
         return (this.getStartTime().equals(date));
     }

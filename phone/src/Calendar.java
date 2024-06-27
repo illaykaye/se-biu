@@ -62,13 +62,13 @@ public class Calendar extends Application {
         return false;
     }
 
-    private LinkedList<Event> getDay(int day) {
+    public LinkedList<Event> getDay(int day) {
         return this.calendar[day];
     }
 
     private void overlaps() {
         for (int i = 0; i < 30; i++) {
-            overlapsDay(i);
+            this.overlapsDay(i);
         }
     }
 
@@ -114,11 +114,17 @@ public class Calendar extends Application {
         while (iter.hasNext()) System.out.println(iter.next());
     }
 
+    private int getDayOfTheMonth(Date d) {
+        java.util.Calendar cal = java.util.Calendar.getInstance();
+        cal.setTime(d);
+        return cal.get(java.util.Calendar.DAY_OF_MONTH);
+    }
+
     private void deleteEvent() throws ParseException {
         System.out.println("Enter date and time of event to delete (dd/MM/yyyy HH:mm): ");
         String dateString = scanner.nextLine();
         Date date = dateFormat.parse(dateString);
-        LinkedList<Event> calDay = this.getDay(date.getDay());
+        LinkedList<Event> calDay = this.getDay(this.getDayOfTheMonth(date));
         Event eve = null;
         boolean removed = false;
         for (Event e : calDay) {
@@ -135,7 +141,7 @@ public class Calendar extends Application {
         }
     }
 
-    private void addEvent() throws ParseException {
+    private void addEvent() throws Exception {
         Event event = null;
         System.out.println("Meeting or event [m/e]? ");
         String me = scanner.nextLine();
@@ -154,9 +160,12 @@ public class Calendar extends Application {
             System.out.println("Enter event description: ");
             String description = scanner.nextLine();
             event = new Event(dateString, lengthInMinutes, description);
-        }
+        } else throw new Exception("Invalid Option");
+
         boolean added = false;
-        LinkedList<Event> calDay = this.getDay(event.getStartTime().getDay());
+        assert event != null;
+
+        LinkedList<Event> calDay = this.getDay(event.getDayOfTheMonth());
         ListIterator<Event> iter = calDay.listIterator();
         while (iter.hasNext()) {
             Event e = iter.next();

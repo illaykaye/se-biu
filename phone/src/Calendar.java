@@ -114,17 +114,6 @@ public class Calendar extends Application {
         while (iter.hasNext()) System.out.println(iter.next());
     }
 
-    /*
-    private boolean deleteEvent(Date date) {
-        LinkedList<Event> calDay = this.getDay(date.getDay());
-        for (Event e : calDay) {
-            if (e.isDate(date)) {
-                return calDay.remove(e);
-            }
-        }
-        return false;
-    }
-    */
     private void deleteEvent() throws ParseException {
         System.out.println("Enter date and time of event to delete (dd/MM/yyyy HH:mm): ");
         String dateString = scanner.nextLine();
@@ -166,8 +155,18 @@ public class Calendar extends Application {
             String description = scanner.nextLine();
             event = new Event(dateString, lengthInMinutes, description);
         }
-
+        boolean added = false;
         LinkedList<Event> calDay = this.getDay(event.getStartTime().getDay());
-        ListIterator<Event> list = calDay.listIterator();
+        ListIterator<Event> iter = calDay.listIterator();
+        while (iter.hasNext()) {
+            Event e = iter.next();
+            if (event.getStartTime().after(e.getStartTime())) {
+                iter.add(event);
+                added = true;
+            }
+        }
+        if (!added) {
+            iter.add(event);
+        }
     }
 }

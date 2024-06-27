@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 public class SMS extends Application {
     private final Scanner scanner = super.scanner;
-    private final HashMap<String, ArrayList<String>> messages = new HashMap<String, ArrayList<String>>();
+    private final HashMap<String, ArrayList<String>> messages = new HashMap<>();
     private final Phonebook phonebook;
     private final ArrayList<Contact> contacts;
 

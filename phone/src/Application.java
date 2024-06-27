@@ -10,6 +10,8 @@ public abstract class Application {
 
     protected abstract void printOptions();
 
+    public abstract void onContactRemoval();
+
     public void runApp() {
         boolean exit = false;
         while (!exit) {

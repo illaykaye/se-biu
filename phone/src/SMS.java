@@ -52,6 +52,11 @@ public class SMS extends Application {
         System.out.println("6: Exit");
     }
 
+    @Override
+    public void onContactRemoval() {
+        throw new UnsupportedOperationException("Not implemented, yet.");
+    }
+
     private void addMessage() {
         System.out.println("Enter contact name:");
         String name = scanner.nextLine();

@@ -35,6 +35,11 @@ public class Phonebook extends Application {
     }
 
     @Override
+    public void onContactRemoval() {
+        throw new UnsupportedOperationException("Not implemented, yet.");
+    }
+
+    @Override
     protected boolean decodeUserInput(int input) throws Exception {
         switch (input) {
             case 1:

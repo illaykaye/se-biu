@@ -62,6 +62,11 @@ public class Media extends Application {
         System.out.println("4: Exit");
     }
 
+    @Override
+    public void onContactRemoval() {
+        throw new UnsupportedOperationException("Not implemented, yet.");
+    }
+
     private void addFile() {
         System.out.println("Enter path of new MP3/MP4 file: ");
         Path filePath = Paths.get(scanner.nextLine());

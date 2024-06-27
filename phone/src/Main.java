@@ -3,9 +3,7 @@ package phone.src;
 
 public class Main {
     public static void main(String[] args) {
-        Phonebook phonebook = new Phonebook();
-        phonebook.runApp();
-        SMS sms = new SMS(phonebook);
-        sms.runApp();
+        Application cal = new Calendar();
+        cal.runApp();
     }
 }
